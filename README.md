@@ -11,6 +11,7 @@
 | 技能名称 | 目录路径 | 核心定位与适用范围 |
 | :--- | :--- | :--- |
 | **`engineering-discipline`** | [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md) | **全语言通用工程纪律与协作准则**：事实查验、低 Token 4 级执行序、零谄媚客观交流、争议主动对齐、500行代码红线（Kotlin/Java/C++等）、文档同步规范、分级UI资产规范及默认二次需求核对机制。 |
+| **`toolchain`** | [`./toolchain/SKILL.md`](./toolchain/SKILL.md) | **开发工具链配置与 AI 高效 CLI 选型**：用户目录确认、静默安装 Scoop 与 Buckets、AI 提效工具矩阵（`fd`/`rg`/`jq`/`ast-grep`/`bat`/`rtk`）、环境初始化与时机选型路由。 |
 | **`kmp-compose`** | [`./kmp-compose/SKILL.md`](./kmp-compose/SKILL.md) | **Kotlin Multiplatform & Compose 跨端开发规范**：`commonMain` 源码集隔离、Clean 架构、接口 DI 替代 `expect/actual`、`StateFlow` 单向数据流、Compose 重组性能优化、反模式黑白名单速查。 |
 | **`android-compose`** | [`./android-compose/SKILL.md`](./android-compose/SKILL.md) | **Android 原生 Jetpack Compose 开发规范**：Android 15+ 沉浸式全面屏 `enableEdgeToEdge()`、WindowInsets 消费、副作用精准管理（`LaunchedEffect`/`DisposableEffect`）、Context 内存防泄漏、Modifier 顺序防坑与 Type-Safe 导航。 |
 
@@ -25,11 +26,26 @@ D:\GTMI\Skills\
 │   ├── SKILL.md
 │   ├── rules\
 │   └── references\
-├── kmp-compose\                                # 2. KMP 跨端与 Compose Multiplatform 专用包
+├── toolchain\                                  # 2. 开发工具链配置与 AI 高效 CLI 选型包
+│   ├── SKILL.md                                # 主入口 (触发识别与路由)
+│   ├── rules\
+│   │   ├── 01-scoop-bootstrap-setup.md         # 01. Scoop 探测、用户路径确认与初始化
+│   │   ├── 02-curated-ai-tools.md              # 02. AI 效率与低 Token CLI 工具精选矩阵
+│   │   ├── 03-tool-selection-router.md         # 03. 场景选型决策树与时机指引
+│   │   └── 04-wezterm-zellij-theme-setup.md    # 04. 终端主题配置跨设备自动分发与复现
+│   ├── templates\                              # 终端配置与主题资产模板
+│   │   ├── wezterm.lua                         # WezTerm Kasugano 0.75微透主题
+│   │   └── zellij\config.kdl                   # Zellij 配套冷色调主题配置
+│   ├── references\
+│   │   └── tool-cheatsheet.md                  # 常用工具高频参数与防坑速查手册
+│   └── scripts\
+│       ├── bootstrap-scoop.ps1                 # 一键自动化检测、安装与环境初始化脚本
+│       └── setup-terminal-themes.ps1           # 一键终端工具安装与主题配置分发脚本
+├── kmp-compose\                                # 3. KMP 跨端与 Compose Multiplatform 专用包
 │   ├── SKILL.md
 │   ├── rules\
 │   └── references\
-└── android-compose\                            # 3. Android 原生 Jetpack Compose 专用包
+└── android-compose\                            # 4. Android 原生 Jetpack Compose 专用包
     ├── SKILL.md                                # 主入口 (触发识别与路由)
     ├── rules\                                  # 细分规则
     │   ├── 01-edge-to-edge-insets.md           # 01. 沉浸式全面屏与 Insets 规约
@@ -52,6 +68,9 @@ D:\GTMI\Skills\
   ```powershell
   # 软链通用工程准则
   New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\engineering-discipline" -Target "D:\GTMI\Skills\engineering-discipline"
+
+  # 软链工具链与 AI CLI 技能
+  New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\toolchain" -Target "D:\GTMI\Skills\toolchain"
 
   # 软链 KMP 跨端规范
   New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\kmp-compose" -Target "D:\GTMI\Skills\kmp-compose"

@@ -1,0 +1,31 @@
+// Zellij 配置文件 - 配合 WezTerm Kasugano 主题
+// 配色统一：冷色调（蓝绿紫系）+ 支持终端背景透传
+
+theme "kasugano"
+
+themes {
+    kasugano {
+        fg "#EDEDED"
+        bg "#000000"
+        black "#000000"
+        red "#CC5555"
+        green "#55CC88"
+        yellow "#C5A55A"
+        blue "#5588CC"
+        magenta "#AA77CC"
+        cyan "#55BBCC"
+        white "#CCCCCC"
+        orange "#FFDD77"
+    }
+}
+
+// 状态栏与 UI 设置
+simplified_ui false
+pane_frames true
+auto_layout true
+
+// 鼠标支持
+mouse_mode true
+
+// 默认 Shell (PowerShell UTF-8)
+default_shell "powershell.exe"

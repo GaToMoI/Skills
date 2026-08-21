@@ -23,7 +23,12 @@
 
 ---
 
-## 3. 命令行输出过滤（Token 止损三诫）
+## 3. 命令行输出过滤与防卡死（Token 与时延止损四诫）
 1. **构建输出拦截**：运行 Gradle / CMake 构建时，优先使用 `rtk` 代理或附加 `--quiet` / `grep` 过滤，严禁将数万行编译 log 灌入上下文。
 2. **日志抓取拦截**：抓取 Logcat 时必须带有明确的 tag 过滤（如 `adb logcat -s MyTag:D`）或指定行数（`adb logcat -t 100`）。
 3. **文件读取按需切片**：阅读超大文件时必须指定 `StartLine` 与 `EndLine` 切片读取，避免单次读取超大文本。
+4. **文件与依赖检索防卡死红线**：
+   * **严禁全盘/全局泛查**：严禁在命令行执行 `find /`、`find ~` 等全盘遍历指令；搜索路径必须严格限定在工程根目录或具体子模块内（如 `find .` 或 `find shared/`）。
+   * **高效现代工具优先**：优先使用 `fd` 或 `ripgrep` (`rg`) 替代原生 `find`/`grep`，利用其自动识别 `.gitignore` 特性跳过庞大构建目录，大幅降低 I/O 开销。
+   * **降级携带深度与排除项**：降级使用 `find` 时必须指定最大深度（`-maxdepth <N>`）并显式排除 `.git`、`build`、`.gradle`、`node_modules` 等缓存与产物目录。
+   * **依赖与 Jar 包排查规约**：严禁使用 `find ~/.gradle` 等方式暴力扫描系统缓存目录；排查依赖关系必须使用构建工具标准命令（如 `./gradlew :shared:dependencies`）或直接核对版本目录文件（`build.gradle.kts` / `libs.versions.toml`）。
