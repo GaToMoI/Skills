@@ -25,6 +25,7 @@ description: >-
 | **准则七** | **UI 资产与图标规范（条件触发）** | 有设计源时严禁字符拟态并强制规范切图；无设计源时使用平台标准矢量/提示资产补充。 | [`./rules/ui-asset-guidelines.md`](./rules/ui-asset-guidelines.md) |
 | **准则八** | **需求理解默认二次核对机制** | 未明确要求直接改代码时禁止盲目编码；三步核对（复述+推演+改动清单）确认后再动工。 | [`./rules/secondary-verification.md`](./rules/secondary-verification.md) |
 | **准则九** | **代码注释与文档完整性规范** | 解释“为什么”而非复述“做什么”；保护既有注释铁律；公共 API 强制 KDoc/Javadoc。 | [`./rules/code-commenting-guidelines.md`](./rules/code-commenting-guidelines.md) |
+| **准则十** | **数据获取与解析完整性** | 结构化数据禁止线性化剥取；多来源交叉核对；异常数字合理性校验；结论可溯源。 | [`./rules/data-acquisition-integrity.md`](./rules/data-acquisition-integrity.md) |
 
 
 ---
