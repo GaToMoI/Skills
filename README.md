@@ -10,7 +10,8 @@
 
 | 技能名称 | 目录路径 | 核心定位与适用范围 |
 | :--- | :--- | :--- |
-| **`engineering-discipline`** | [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md) | **全语言通用工程纪律与协作准则**：事实查验、低 Token 4 级执行序、零谄媚客观交流、争议主动对齐、500行代码红线（Kotlin/Java/C++等）、文档同步规范、分级UI资产规范及默认二次需求核对机制。 |
+| **`SKILL`（顶层路由）** | [`./SKILL.md`](./SKILL.md) | **★ 唯一入口**：始终激活 `engineering-discipline` 全局基准，按项目类型决策树自动加载 `kmp-compose` / `android-compose`，`toolchain` 按需手动激活。 |
+| **`engineering-discipline`** | [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md) | **全语言通用工程纪律与协作准则**（全局基准，无条件激活）：事实查验、低 Token 4 级执行序、零谄媚客观交流、争议主动对齐、500行代码红线（Kotlin/Java/C++等）、文档同步规范、分级UI资产规范及默认二次需求核对机制。 |
 | **`toolchain`** | [`./toolchain/SKILL.md`](./toolchain/SKILL.md) | **开发工具链配置与 AI 高效 CLI 选型**：用户目录确认、静默安装 Scoop 与 Buckets、AI 提效工具矩阵（`fd`/`rg`/`jq`/`ast-grep`/`bat`/`rtk`）、环境初始化与时机选型路由。 |
 | **`kmp-compose`** | [`./kmp-compose/SKILL.md`](./kmp-compose/SKILL.md) | **Kotlin Multiplatform & Compose 跨端开发规范**：`commonMain` 源码集隔离、Clean 架构、接口 DI 替代 `expect/actual`、`StateFlow` 单向数据流、Compose 重组性能优化、反模式黑白名单速查。 |
 | **`android-compose`** | [`./android-compose/SKILL.md`](./android-compose/SKILL.md) | **Android 原生 Jetpack Compose 开发规范**：Android 15+ 沉浸式全面屏 `enableEdgeToEdge()`、WindowInsets 消费、副作用精准管理（`LaunchedEffect`/`DisposableEffect`）、Context 内存防泄漏、Modifier 顺序防坑与 Type-Safe 导航。 |
@@ -21,8 +22,9 @@
 
 ```text
 D:\GTMI\Skills\
+├── SKILL.md                                    # ★ 顶层路由入口（始终加载 engineering-discipline，按项目类型激活子技能）
 ├── README.md                                   # 技能仓库总览与导入指南
-├── engineering-discipline\                     # 1. 全语言通用工程纪律与协作准则包
+├── engineering-discipline\                     # 1. 全语言通用工程纪律与协作准则包（全局基准，无条件激活）
 │   ├── SKILL.md
 │   ├── rules\
 │   └── references\
