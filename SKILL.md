@@ -2,9 +2,9 @@
 name: universal-skills-router
 description: >-
   Top-level skills router for the universal engineering skills repository.
-  Always activates engineering-discipline as the global baseline, then conditionally
-  loads project-type-specific skills (kmp-compose, android-compose) and toolchain
-  on demand. Use for ALL projects — this is the single entry point.
+  Always activates engineering-discipline and toolchain as the global baseline,
+  then conditionally loads project-type-specific skills (kmp-compose, android-compose).
+  Use for ALL projects — this is the single entry point.
 ---
 
 # 通用技能路由入口 (Universal Skills Router)
@@ -30,6 +30,49 @@ description: >-
 | 代码注释完整性 | 解释"为什么"而非"做什么" |
 
 > 详细规则参见 [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md)
+
+---
+
+## 始终激活：AI 高效工具链与选型路由
+
+**`toolchain`** 也是全局基准技能，**所有项目、所有任务**都必须无条件遵循。它定义了：
+
+| 规则 | 要义 |
+|:---|:---|
+| 工具存在性前置检查 | **使用工具前必须先检查是否存在**，不存在则降级或提示安装 |
+| 场景选型决策树 | 找文件→`fd`、搜代码→`rg`、改结构→`ast-grep`、析JSON→`jq`、截日志→`rtk` |
+| 禁止低效工具 | 🚫 `find /`、🚫 `grep -r` 全量递归、🚫 裸跑 `gradlew`、🚫 原始 JSON 灌入 |
+| Scoop 环境初始化 | 按需引导安装 Scoop 及核心工具包 |
+
+> 详细规则参见 [`./toolchain/SKILL.md`](./toolchain/SKILL.md)
+
+### 🔴 工具存在性前置检查（强制）
+
+在执行任何 CLI 命令前，AI 必须遵循以下检查流程：
+
+```text
+[准备使用高效工具 (fd/rg/rtk/jq/ast-grep/bat/delta)]
+   │
+   ├──► 1. 快速检查工具是否存在（任选其一）：
+   │       Windows:  Get-Command <tool> -ErrorAction SilentlyContinue
+   │       Unix:     which <tool> || command -v <tool>
+   │
+   ├──► 2. ✅ 存在 → 直接使用高效工具
+   │
+   └──► 3. ❌ 不存在 → 按降级策略执行：
+           ├── fd 缺失     → 降级用 find（必须加 -maxdepth + 排除 .git/build/.gradle）
+           ├── rg 缺失     → 降级用 grep -r（必须限定路径 + --include 过滤）
+           ├── rtk 缺失    → 降级用 --quiet 或 | tail -20 手动截断
+           ├── jq 缺失     → 降级用 read + 手工定位关键字段
+           ├── ast-grep 缺失 → 降级用 rg 正则（需人工复核边界）
+           ├── bat 缺失    → 降级用 read 切片
+           └── delta 缺失  → 降级用 git diff 原生输出
+           
+           同时提示用户可一键安装：
+           scoop install ripgrep fd jq bat ast-grep rtk 7zip
+```
+
+> ⚠️ **绝对禁止**：在不检查工具是否存在的情况下，直接假设工具可用并调用，导致命令失败浪费交互轮次。
 
 ---
 
@@ -68,19 +111,6 @@ description: >-
 
 ---
 
-## 按需激活：工具链与环境配置
-
-**`toolchain`** 技能不自动激活，在以下场景手动加载：
-
-- 用户要求配置/安装开发工具链
-- 需要初始化 Scoop 包管理器或安装 CLI 工具
-- 需要终端主题（WezTerm/Zellij）配置
-- AI 需要选型决策（用 `fd` 还是 `find`、`rg` 还是 `grep`）
-
-> 详见 [`./toolchain/SKILL.md`](./toolchain/SKILL.md)
-
----
-
 ## 加载流程总结
 
 ```text
@@ -88,15 +118,19 @@ description: >-
                     │  加载 SKILL.md (本文件)    │
                     └──────────┬───────────────┘
                                │
-                    ┌──────────▼───────────────┐
-                    │  engineering-discipline   │
-                    │  （无条件始终激活）         │
-                    └──────────┬───────────────┘
-                               │
+          ┌────────────────────┼────────────────────┐
+          ▼                    ▼                    │
+┌──────────────────┐  ┌──────────────────┐          │
+│ engineering-      │  │    toolchain     │          │
+│ discipline        │  │ （无条件始终激活） │          │
+│ （无条件始终激活）  │  │ 工具选型+存在性   │          │
+│ 工程纪律+代码规范  │  │ 检查+降级策略    │          │
+└──────────────────┘  └──────────────────┘          │
+                               │                    │
               ┌────────────────┼────────────────┐
               ▼                ▼                ▼
-      ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-      │ kmp-compose  │ │android-compose│ │  toolchain   │
-      │ （KMP项目）   │ │（Android项目） │ │ （按需手动）  │
-      └──────────────┘ └──────────────┘ └──────────────┘
+      ┌──────────────┐ ┌──────────────┐
+      │ kmp-compose  │ │android-compose│
+      │ （KMP项目）   │ │（Android项目） │
+      └──────────────┘ └──────────────┘
 ```

@@ -82,3 +82,99 @@ ast-grep -p 'println($$$A)' -r 'Log.d("Tag", $$$A)' -l kotlin --inline-rules
 | `find ~/.gradle -name "*.jar"` | 遍历数十万哈希缓存文件，耗时极高 | `./gradlew :shared:dependencies` |
 | `cat 5000-lines.json` | 瞬间向上下文灌入数万 Token，引发遗忘漂移 | `jq '.target_field' 5000-lines.json` |
 | 跨行复杂语法直接使用 `sed` 正则替换 | 容易破坏 AST 嵌套括号或误伤注释 | `ast-grep` 语法树精确重写 |
+
+---
+
+## 6. 新增工具速查
+
+### 6.1 HTTP 请求 (`xh` / `curlie` / `httpstat`)
+
+```bash
+# xh: Rust 版 HTTPie，JSON 自动高亮
+xh GET https://api.example.com/users
+xh POST https://api.example.com/users name=John age:=30   # := 表示 JSON 数字
+
+# curlie: curl 语法 + httpie 风格输出
+curlie https://api.example.com/users
+
+# httpstat: 可视化请求各阶段耗时
+httpstat https://api.example.com/users
+```
+
+### 6.2 数据解析 (`xsv` / `csview` / `choose` / `yq`)
+
+```bash
+# xsv: 极速 CSV 切片
+xsv select name,version packages.csv
+xsv stats packages.csv
+
+# csview: CSV 对齐预览
+csview packages.csv
+
+# choose: 管道按列切分 (类 cut 但更人性化)
+cat data.txt | choose -f '\t' 1 2
+
+# yq: YAML/JSON/XML 统一处理
+cat build.gradle.kts | yq eval '.version'
+yq eval '.dependencies' pubspec.yaml
+```
+
+### 6.3 磁盘/系统 (`dust` / `duf` / `dua` / `gdu` / `procs` / `bandwhich`)
+
+```bash
+dust -d 2 .          # 可视化磁盘占用 (2 层深度)
+duf                   # 彩色磁盘分区概览
+dua i .              # 交互式磁盘分析
+gdu .                # 高速磁盘分析 (Go)
+procs                # 彩色进程列表
+bandwhich             # 实时网络带宽监控
+```
+
+### 6.4 导航/文件管理 (`zoxide` / `eza` / `yazi` / `lf` / `broot`)
+
+```bash
+z <dirname>          # 智能目录跳转 (自动学习常用路径)
+eza -l --git .       # 彩色 ls + Git 状态
+broot .              # 交互式目录树导航
+```
+
+### 6.5 搜索增强 (`ugrep` / `rga` / `igrep`)
+
+```bash
+ugrep -i "pattern" .        # 超 grep (模糊匹配)
+rga "keyword" .             # 万能搜索 (PDF/Office/压缩包/图片)
+ig "pattern" .              # 交互式 grep
+```
+
+### 6.6 构建/自动化 (`watchexec` / `just`)
+
+```bash
+watchexec -e kt ./gradlew :shared:compileDebugKotlin   # 文件变动自动重跑
+just build          # 现代化任务运行器 (Justfile)
+```
+
+### 6.7 其他 (`sd` / `grex` / `tldr` / `navi` / `hyperfine` / `tokei` / `fastfetch` / `onefetch` / `hexyl` / `glow` / `btm` / `mlr` / `ig` / `cb`)
+
+```bash
+sd 'old' 'new' file.txt        # 直观查找替换
+sd -g 'foo' 'bar'              # 全局替换 (类 sed s/foo/bar/g)
+
+grex "2024-01-01" "2024-12-31"   # 从示例生成正则
+
+tldr rg                        # 命令速查 (简化 man)
+navi                           # 交互式命令速查
+
+hyperfine 'rg foo' 'grep -r foo'   # 性能基准对比
+
+tokei .                        # 代码行数统计
+fastfetch                      # 系统信息
+onefetch                       # Git 仓库信息
+
+hexyl file.bin                 # 彩色十六进制查看
+
+glow README.md                 # # Markdown 终端渲染
+
+btm                            # 系统监控 (bottom)
+mlr --csv cat data.csv         # CSV 处理 (miller)
+cb copy "text"                 # 剪贴板
+```
