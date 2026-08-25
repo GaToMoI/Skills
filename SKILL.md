@@ -27,6 +27,7 @@ description: >-
 | 架构文档维护规约 | 根目录/模块 README 与 `docs/explain/` 同步 |
 | UI 资产规范（条件触发） | 有设计源禁字符拟态，无源用标准矢量 |
 | 需求默认二次核对 | 三步核对（复述+推演+改动清单）后动工 |
+| 任务边界与范围守则 | 守住任务边界；遇到阻塞先报告+询问，不擅自修无关代码 |
 | 代码注释完整性 | 解释"为什么"而非"做什么" |
 
 > 详细规则参见 [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md)
