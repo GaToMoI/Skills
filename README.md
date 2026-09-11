@@ -55,6 +55,7 @@
 ```text
 D:\GTMI\Skills\
 ├── README.md                       # 本文件（非技能）
+├── scripts\sync-agent-skills.ps1   # 同步全局技能到各 CLI agent（幂等）
 ├── general\
 │   ├── collaboration-discipline\
 │   │   ├── SKILL.md
@@ -102,6 +103,19 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.agents\skills" -Target "D:\
 新增 / 改名 / 拆分技能后**无需重挂**——仓库结构即挂载结构。
 
 > ⚠️ **不要**再把本仓库整体或逐个技能加入 pi 的 `settings.json` `skills` 数组：那会以 `mode=pi` 扫描，把根级 `README.md` 也当技能候选（产生无 frontmatter 的诊断警告）。标准位置 `~/.agents/skills` 以 `mode=agents` 扫描，根级 `.md` 被忽略。
+
+### 同步到其他 CLI agent
+
+其它 agent 自有技能目录，用脚本逐技能建 junction（深度 1，不依赖任何 agent 的递归行为）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1          # 执行
+powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1 -WhatIf  # 预演
+```
+
+当前目标：`~/.claude/skills`（Claude Code）、`~/.codex/skills`（Codex）、`~/.codewhale/skills`（CodeWhale）。
+脚本**只删指向本仓库的旧链接**，绝不触碰 agent 自带技能（如 Codex 的 `.system/`、CodeWhale 的 bundled）。
+新增 / 改名技能后重跑一次即可。
 
 ---
 
