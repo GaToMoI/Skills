@@ -1,90 +1,114 @@
 # 通用工程与 AI 协作技能库 (Universal Skills Repository)
 
-本仓库（`D:\GTMI\Skills`）用于归档、沉淀跨项目、跨语言通用的 **AI 协作技能（Skills）** 与 **工程交付准则**。各工程项目可直接软链、引用或复制本仓库中的技能规范。
-
-本技能库采用 **开源分层模块化架构（Progressive Disclosure / 渐进式披露）**，实现超低初始 Token 消耗与按需加载。
+跨项目、跨语言通用的 **AI 协作技能（Skills）** 归档库。采用 **Agent Skills 标准**目录格式，按"**生效时机**"分层而非按主题堆叠。
 
 ---
 
-## 技能目录索引 (Skill Catalog)
+## 三层架构
 
-| 技能名称 | 目录路径 | 核心定位与适用范围 |
-| :--- | :--- | :--- |
-| **`SKILL`（顶层路由）** | [`./SKILL.md`](./SKILL.md) | **★ 唯一入口**：始终激活 `engineering-discipline` 全局基准，按项目类型决策树自动加载 `kmp-compose` / `android-compose`，`toolchain` 按需手动激活。 |
-| **`engineering-discipline`** | [`./engineering-discipline/SKILL.md`](./engineering-discipline/SKILL.md) | **全语言通用工程纪律与协作准则**（全局基准，无条件激活）：事实查验、低 Token 4 级执行序、零谄媚客观交流、争议主动对齐、500行代码红线（Kotlin/Java/C++等）、文档同步规范、分级UI资产规范、默认二次需求核对机制及数据获取解析完整性。 |
-| **`toolchain`** | [`./toolchain/SKILL.md`](./toolchain/SKILL.md) | **开发工具链配置与 AI 高效 CLI 选型**：用户目录确认、静默安装 Scoop 与 Buckets、AI 提效工具矩阵（`fd`/`rg`/`jq`/`ast-grep`/`bat`/`rtk`）、环境初始化与时机选型路由。 |
-| **`kmp-compose`** | [`./kmp-compose/SKILL.md`](./kmp-compose/SKILL.md) | **Kotlin Multiplatform & Compose 跨端开发规范**：`commonMain` 源码集隔离、Clean 架构、接口 DI 替代 `expect/actual`、`StateFlow` 单向数据流、Compose 重组性能优化、反模式黑白名单速查。 |
-| **`android-compose`** | [`./android-compose/SKILL.md`](./android-compose/SKILL.md) | **Android 原生 Jetpack Compose 开发规范**：Android 15+ 沉浸式全面屏 `enableEdgeToEdge()`、WindowInsets 消费、副作用精准管理（`LaunchedEffect`/`DisposableEffect`）、Context 内存防泄漏、Modifier 顺序防坑与 Type-Safe 导航。 |
+| 层 | 位置 | 加载时机 | 成本 |
+|:--|:--|:--|:--|
+| **L0 红线** | `~/.pi/agent/AGENTS.md`（全局） | **每次会话常驻** | 固定，约 800 token |
+| **L1 技能** | 本仓库 `*/*/SKILL.md` | description 语义匹配后由模型 `read` | 0 直到触发 |
+| **L2 载荷** | 各技能 `references/` `scripts/` `templates/` | 父技能指路后按需读取 | 0，且不注册为技能 |
+
+> **判据**：一条规则该放哪层，只问一个问题——**「它在什么时机生效？」**
+> 每次动作前都要判的（授权、边界、命令纪律）→ L0；领域知识 → L1；判例与模板 → L2。
 
 ---
 
-## 架构分层结构
+## 技能索引
+
+### general（通用工程纪律）
+
+| 技能 | 覆盖内容 |
+|:--|:--|
+| [`collaboration-discipline`](general/collaboration-discipline/SKILL.md) | 授权粒度三档、诊断与修复权界、任务边界、存疑即停、客观直率、目标平台优先级 |
+| [`code-standards`](general/code-standards/SKILL.md) | 500 行红线与拆分手法、注释规范、架构文档同步、临时产物纪律 |
+| [`evidence-research`](general/evidence-research/SKILL.md) | 事实查验四级执行序、免费网络检索、结构化数据完整性、交叉核对与溯源 |
+
+### environment（环境与工具链）
+
+| 技能 | 覆盖内容 |
+|:--|:--|
+| [`dev-environment`](environment/dev-environment/SKILL.md) | Scoop 初始化、AI 提效 CLI 矩阵、场景选型决策树、已装工具清单 |
+| [`terminal-dotfiles`](environment/terminal-dotfiles/SKILL.md) | WezTerm / Zellij 主题模板与跨设备分发脚本 |
+
+### ui（界面交付）
+
+| 技能 | 覆盖内容 |
+|:--|:--|
+| [`ui-delivery`](ui/ui-delivery/SKILL.md) | UI 资产分级判定、图标位铁律（设计源有无两条路径） |
+
+### compose（Compose 开发）
+
+| 技能 | 覆盖内容 |
+|:--|:--|
+| [`compose-foundations`](compose/compose-foundations/SKILL.md) | **KMP / Android 共用**：副作用生命周期、Modifier 顺序与触摸热区、重组性能、组件设计契约 |
+| [`kmp-architecture`](compose/kmp-architecture/SKILL.md) | KMP 专项：commonMain 纯粹性、接口 DI > expect/actual、StateFlow MVI、反模式黑名单 |
+| [`android-platform`](compose/android-platform/SKILL.md) | Android 专项：edge-to-edge 与 Insets、Context 泄漏、Type-Safe 导航、Preview |
+
+---
+
+## 目录结构
 
 ```text
 D:\GTMI\Skills\
-├── SKILL.md                                    # ★ 顶层路由入口（始终加载 engineering-discipline，按项目类型激活子技能）
-├── README.md                                   # 技能仓库总览与导入指南
-├── engineering-discipline\                     # 1. 全语言通用工程纪律与协作准则包（全局基准，无条件激活）
-│   ├── SKILL.md
-│   ├── rules\
-│   └── references\
-├── toolchain\                                  # 2. 开发工具链配置与 AI 高效 CLI 选型包
-│   ├── SKILL.md                                # 主入口 (触发识别与路由)
-│   ├── rules\
-│   │   ├── 01-scoop-bootstrap-setup.md         # 01. Scoop 探测、用户路径确认与初始化
-│   │   ├── 02-curated-ai-tools.md              # 02. AI 效率与低 Token CLI 工具精选矩阵
-│   │   ├── 03-tool-selection-router.md         # 03. 场景选型决策树与时机指引
-│   │   └── 04-wezterm-zellij-theme-setup.md    # 04. 终端主题配置跨设备自动分发与复现
-│   ├── templates\                              # 终端配置与主题资产模板
-│   │   ├── wezterm.lua                         # WezTerm Kasugano 0.75微透主题
-│   │   └── zellij\config.kdl                   # Zellij 配套冷色调主题配置
-│   ├── references\
-│   │   └── tool-cheatsheet.md                  # 常用工具高频参数与防坑速查手册
-│   └── scripts\
-│       ├── bootstrap-scoop.ps1                 # 一键自动化检测、安装与环境初始化脚本
-│       └── setup-terminal-themes.ps1           # 一键终端工具安装与主题配置分发脚本
-├── kmp-compose\                                # 3. KMP 跨端与 Compose Multiplatform 专用包
-│   ├── SKILL.md
-│   ├── rules\
-│   └── references\
-└── android-compose\                            # 4. Android 原生 Jetpack Compose 专用包
-    ├── SKILL.md                                # 主入口 (触发识别与路由)
-    ├── rules\                                  # 细分规则
-    │   ├── 01-edge-to-edge-insets.md           # 01. 沉浸式全面屏与 Insets 规约
-    │   ├── 02-compose-side-effects.md          # 02. 副作用与生命周期管理
-    │   ├── 03-context-memory-safety.md         # 03. Context 内存安全底线
-    │   ├── 04-modifier-chaining-pitfalls.md    # 04. Modifier 顺序与触摸热区防坑
-    │   └── 05-type-safe-navigation-preview.md  # 05. Type-Safe 导航与多形态 Preview
-    └── references\
-        └── android-compose-checklist.md        # Android 原生交付自查清单
+├── README.md                       # 本文件（非技能）
+├── general\
+│   ├── collaboration-discipline\
+│   │   ├── SKILL.md
+│   │   └── references\             # 各准则展开判例
+│   ├── code-standards\
+│   │   ├── SKILL.md
+│   │   └── references\
+│   └── evidence-research\
+│       ├── SKILL.md
+│       └── references\
+├── environment\
+│   ├── dev-environment\
+│   │   ├── SKILL.md
+│   │   ├── references\
+│   │   └── scripts\bootstrap-scoop.ps1
+│   └── terminal-dotfiles\
+│       ├── SKILL.md
+│       ├── references\
+│       ├── templates\              # wezterm.lua, zellij\config.kdl
+│       └── scripts\setup-terminal-themes.ps1
+├── ui\
+│   └── ui-delivery\
+│       ├── SKILL.md
+│       └── references\
+└── compose\
+    ├── compose-foundations\        # KMP + Android 共用
+    ├── kmp-architecture\
+    └── android-platform\
 ```
+
+**发现机制说明**：分类目录（`general\` `environment\` `ui\` `compose\`）**不含** `SKILL.md`，对加载器透明；扫描时递归下潜直到找到 `SKILL.md` 即止。
+因此：**分类目录仅为人可读性而设，不影响加载**；但**严禁在技能目录内嵌套另一个含 `SKILL.md` 的目录**——外层会被发现，内层被静默吞掉。
 
 ---
 
-## 如何在项目中复用本技能库
+## 挂载方式
 
-### 方式 1：项目级引入（推荐，支持团队 VCS 协同）
-在具体项目的根目录下创建 `.agents/skills/` 目录，将对应技能软链（或直接复制）至项目中：
+**唯一挂载点**（Agent Skills 标准位置，多宿主通用）：
 
-* **Windows PowerShell (目录联接 Junction)**:
-  ```powershell
-  # 软链通用工程准则
-  New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\engineering-discipline" -Target "D:\GTMI\Skills\engineering-discipline"
+```powershell
+# ~/.agents/skills 已软链至本仓库；无需逐技能挂载
+New-Item -ItemType Junction -Path "$env:USERPROFILE\.agents\skills" -Target "D:\GTMI\Skills"
+```
 
-  # 软链工具链与 AI CLI 技能
-  New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\toolchain" -Target "D:\GTMI\Skills\toolchain"
+新增 / 改名 / 拆分技能后**无需重挂**——仓库结构即挂载结构。
 
-  # 软链 KMP 跨端规范
-  New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\kmp-compose" -Target "D:\GTMI\Skills\kmp-compose"
+> ⚠️ **不要**再把本仓库整体或逐个技能加入 pi 的 `settings.json` `skills` 数组：那会以 `mode=pi` 扫描，把根级 `README.md` 也当技能候选（产生无 frontmatter 的诊断警告）。标准位置 `~/.agents/skills` 以 `mode=agents` 扫描，根级 `.md` 被忽略。
 
-  # 软链 Android 原生 Compose 规范
-  New-Item -ItemType Junction -Path "D:\YourProject\.agents\skills\android-compose" -Target "D:\GTMI\Skills\android-compose"
-  ```
-* **复制方式**:
-  ```powershell
-  Copy-Item -Recurse "D:\GTMI\Skills\android-compose" "D:\YourProject\.agents\skills\"
-  ```
+---
 
-### 方式 2：全局用户级配置
-可将技能目录放置在 AI 工具的全局配置目录中，使其对本地所有工程默认生效：
-* 全局路径示例：`~/.gemini/config/skills/` 或本地 Agent 配置根路径。
+## 编辑纪律
+
+- **单真相源**：每条规则的规范性表述**只允许存在一处**。L0 放可执行判据，L1 放规则表，L2 放判例/模板——**三者不得互相复述同一段规范文本**。
+- **禁止词表穷举**：行为判定用语义判据（如"授权 = 对具体动作的放行语义"），不得写成待匹配的关键词列表——词表必漏，且与语义判断冲突。
+- **禁止双重容器**：同一份规则不得同时以"技能"和"AGENTS.md 条目"两种身份存在。
+- 新增/删减技能时，同步更新本文件的技能索引。
+- `tempCache/` 不入版本库（见 `.gitignore`）。

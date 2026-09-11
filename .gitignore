@@ -1,0 +1,8 @@
+# 临时产物（可整体清理，不入版本库）
+tempCache/
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
