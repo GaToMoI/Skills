@@ -66,3 +66,4 @@ description: >-
 - **高频参数与防坑速查**：[`references/tool-cheatsheet.md`](references/tool-cheatsheet.md)
 - **工具矩阵与选型理由**：[`references/curated-ai-tools.md`](references/curated-ai-tools.md)
 - **Scoop 投递细则**：[`references/scoop-bootstrap-setup.md`](references/scoop-bootstrap-setup.md)
+- **本机安装坑位与版本快照**：[`references/local-install-quirks.md`](references/local-install-quirks.md)（7zip shim / eza 残留 / bandwhich Npcap / fd 来源）

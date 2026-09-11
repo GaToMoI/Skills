@@ -115,6 +115,15 @@ powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1 -WhatIf  
 
 当前目标：`~/.claude/skills`（Claude Code）、`~/.codex/skills`（Codex）、`~/.codewhale/skills`（CodeWhale）。
 脚本**只删指向本仓库的旧链接**，绝不触碰 agent 自带技能（如 Codex 的 `.system/`、CodeWhale 的 bundled）。
+
+### antigravity-cli（走共享位置，不靠脚本同步）
+
+| 项 | 路径 |
+|:--|:--|
+| 技能目录 | `~/.agents/skills` → 本仓库（符号链接） |
+| 技能目录（备用） | `~/.gemini/config/skills` → 本仓库（符号链接） |
+| 技能注册 | `~/.gemini/config/skills.json` 的 `entries` 含 `D:/GTMI/Skills` |
+| 规则加载 | `~/.agents/rules/*.md`（已有 `antigravity-rtk-rules.md`）、`~/.gemini/GEMINI.md` |
 新增 / 改名技能后重跑一次即可。
 
 ---

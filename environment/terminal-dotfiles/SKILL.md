@@ -51,3 +51,4 @@ powershell -ExecutionPolicy Bypass -File "environment\terminal-dotfiles\scripts\
 | Zellij 配色割裂 | KDL 未同步 Kasugano 色值 | 以模板 `config.kdl` 为准重新分发 |
 
 > 完整配置说明：[`references/wezterm-zellij-theme-setup.md`](references/wezterm-zellij-theme-setup.md)
+> btop-lhm 温度监控与 RUNASADMIN 权限继承：[`references/btop-lhm-temperature-monitor.md`](references/btop-lhm-temperature-monitor.md)
