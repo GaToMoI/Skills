@@ -24,7 +24,7 @@
 | 技能 | 覆盖内容 |
 |:--|:--|
 | [`collaboration-discipline`](general/collaboration-discipline/SKILL.md) | 授权粒度三档、诊断与修复权界、任务边界、存疑即停、客观直率、目标平台优先级 |
-| [`code-standards`](general/code-standards/SKILL.md) | 500 行红线与拆分手法、注释规范、架构文档同步、临时产物纪律 |
+| [`code-standards`](general/code-standards/SKILL.md) | 500 行红线与拆分手法、注释规范（面向使用者；禁设计沿革/论证/变更史）、架构文档同步、临时产物纪律 |
 | [`evidence-research`](general/evidence-research/SKILL.md) | 事实查验四级执行序、免费网络检索、结构化数据完整性、交叉核对与溯源 |
 
 ### environment（环境与工具链）

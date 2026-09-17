@@ -2,7 +2,8 @@
 name: code-standards
 description: >-
   Cross-language code delivery standards: the 500-line single-file redline and how to split by responsibility,
-  comment hygiene (why-not-what), README/docs/explain sync policy, and temp-artifact discipline.
+  comment hygiene (usage-first API docs; no design-history, design-rationale, or changelog comments),
+  README/docs/explain sync policy, and temp-artifact discipline.
   Use when writing, modifying, refactoring, splitting, or reviewing source files; when creating or renaming
   modules; when adding comments or public APIs; or when producing debug logs, scratch scripts, or temp captures.
 ---
@@ -31,10 +32,13 @@ description: >-
 
 ## 二 · 注释与文档完整性
 
-- 注释解释 **「为什么」** 而非复述「做什么」；严禁 `// 将 index 加 1` 类语法复述。
-- **保护既有注释铁律**：修改代码时严禁删除 / 篡改与本次变更无关的业务注释与 TODO。
+- 注释**面向使用者**写，形态对齐官方 KDoc / Javadoc：说明这个方法 / 类**做什么**、**参数与返回值**是什么含义、**怎么调用**；严禁 `// 将 index 加 1` 类语法复述。
 - **公共 API 强制 KDoc / Javadoc**（`@param` 约束 / `@return` 语义 / `@throws` 分支）。
-- 魔法数字与复杂算法必须注明公式来源或物理意义。
+- **禁止设计沿革注释**：不写「从 X 演进而来」「讨论文档 § x / ADR-xxx」类来源出处。
+- **禁止设计论证注释**：不写「为什么放在 A 处而不是 B 处」类权衡论证——设计决策归 ADR / 设计文档。
+- **禁止变更日志式注释**：不写日期、版本、「本次修改……」——改动历史由 git 承载。
+- 例外：魔法数字与复杂算法必须注明公式来源或物理意义（此处的「来源」是必要信息）。
+- **保护既有注释铁律**：修改代码时严禁删除 / 篡改与本次变更无关的业务注释与 TODO；存量旧形态注释不追溯清理，本规范只约束**新写 / 新改**的注释。
 - TODO 格式：`// TODO(责任人/日期): 事项`。
 
 > 细则：[`references/code-commenting-guidelines.md`](references/code-commenting-guidelines.md)
