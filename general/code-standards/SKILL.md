@@ -2,10 +2,12 @@
 name: code-standards
 description: >-
   Cross-language code delivery standards: the 500-line single-file redline and how to split by responsibility,
+  directory/package layering (when a package must split, responsibility-based grouping, migration discipline),
   comment hygiene (usage-first API docs; no design-history, design-rationale, or changelog comments),
   README/docs/explain sync policy, and temp-artifact discipline.
-  Use when writing, modifying, refactoring, splitting, or reviewing source files; when creating or renaming
-  modules; when adding comments or public APIs; or when producing debug logs, scratch scripts, or temp captures.
+  Use when writing, modifying, refactoring, splitting, or reviewing source files; when a package grows crowded
+  or a module's file layout needs reorganizing; when creating or renaming modules; when adding comments or
+  public APIs; or when producing debug logs, scratch scripts, or temp captures.
 ---
 
 # 代码交付准则 (Code Standards)
@@ -65,3 +67,17 @@ description: >-
 - 实验区目录只保留**有引用价值的产物**（被文档引用的演示稿、试验模块、调研溯源证据）。
 
 > 细则：[`references/temp-artifacts-discipline.md`](references/temp-artifacts-discipline.md)
+
+---
+
+## 五 · 目录与包分层（分包规则）
+
+500 行红线管「单个文件多大」，本节管「文件怎么放」。
+
+- **触发分包**（满足任一即该拆，不等「感觉乱」）：单包源文件 ≥ **8** 个；或一个包混入了两种**互相不该知道**的东西（如循环引擎与业务工具集、记录器与渲染件）。
+- **分包维度**：按**职责面 / 领域**分（`engine/`、`prompt/`、`tools/`、`session/`），**禁止按类型横切**（`model/`、`ports/`、`impl/`、`internal/`）——类型横切包密度必低，且不承担任何约束。
+- **密度与命名**：不建 1 文件包（特例须写明理由）；包名 = 小写职责名词，与目录同名。
+- **可见性**：包**不承担可见性**边界（如 Kotlin 的 `internal` 是模块级，与目录无关）；禁止为「看起来封装」而造 `internal/` 目录。
+- **模块 vs 包**：模块边界回答「谁拥有这摊事」，包分层回答「模块内怎么找文件」——两个独立问题，都按本节触发条件处理。
+- **迁移纪律**：一次一批（一个模块一批）；改完立刻跑该模块测试 + 全量构建；**构建绿 ≠ 测试跑了**——核对测试报告用例计数 > 0；批量 import 重写先 dry-run 逐文件核对。
+- **决策留痕**：成规模重排（跨模块、改公共包名）先立 ADR / 决策记录；阈值与命名口径写进项目规范，不靠手感。
