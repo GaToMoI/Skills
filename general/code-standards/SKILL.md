@@ -4,7 +4,7 @@ description: >-
   Cross-language code delivery standards: the 500-line single-file redline and how to split by responsibility,
   directory/package layering (when a package must split, responsibility-based grouping, migration discipline),
   comment hygiene (usage-first API docs; no design-history, design-rationale, or changelog comments),
-  README/docs/explain sync policy, and temp-artifact discipline.
+  README maintenance & structure policy, and temp-artifact discipline.
   Use when writing, modifying, refactoring, splitting, or reviewing source files; when a package grows crowded
   or a module's file layout needs reorganizing; when creating or renaming modules; when adding comments or
   public APIs; or when producing debug logs, scratch scripts, or temp captures.
@@ -50,11 +50,10 @@ description: >-
 ## 三 · 架构文档同步
 
 - 工程根 README 维护：全局架构 / 技术栈 / 模块索引 / 构建指南。
-- 有独立构建脚本的模块**必须**维护模块级 README。
-- 深度设计文档归档至 `docs/explain/`，严禁散落。
+- 有独立构建脚本的模块**必须**维护模块级 README；README 须到**逐文件职责**粒度（目录树逐文件职责注释 + 核心文件职责矩阵）。
 - **新增 / 重命名 / 移动 / 拆分 / 删除文件，必须在同次任务中同步更新对应 README。**
 
-> 细则：[`references/doc-sync-policy.md`](references/doc-sync-policy.md)
+> 细则与结构模板：[`references/doc-sync-policy.md`](references/doc-sync-policy.md)
 
 ---
 
@@ -73,6 +72,8 @@ description: >-
 ## 五 · 目录与包分层（分包规则）
 
 500 行红线管「单个文件多大」，本节管「文件怎么放」。
+
+> 设计期判据（规划期如何预判分包、功能/职责切分序、判据三连、依赖方向纪律）见 [`file-architecture`](../file-architecture/SKILL.md)；本节管**存量触发**（≥8 文件阈值）与迁移纪律。
 
 - **触发分包**（满足任一即该拆，不等「感觉乱」）：单包源文件 ≥ **8** 个；或一个包混入了两种**互相不该知道**的东西（如循环引擎与业务工具集、记录器与渲染件）。
 - **分包维度**：按**职责面 / 领域**分（`engine/`、`prompt/`、`tools/`、`session/`），**禁止按类型横切**（`model/`、`ports/`、`impl/`、`internal/`）——类型横切包密度必低，且不承担任何约束。
