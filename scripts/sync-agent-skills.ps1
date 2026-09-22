@@ -9,6 +9,8 @@
       1. 挂载粒度 = 逐技能、深度 1（<agentSkillsDir>\<skillName> -> <repo>\<category>\<skillName>）。
          Claude Code 实测技能模式为 skills/<name>/SKILL.md；Codex 为 skills/.system/<name>/SKILL.md。
          不依赖任何 agent 的"递归下潜"行为，故最稳妥。
+         Antigravity 用户级 = ~/.gemini/skills/<name>/SKILL.md（该目录同时存放其自带技能，
+         均为真实目录，脚本按第 3 条约束只动指向本仓库的链接）。
       2. 幂等：先清理指向本仓库的旧 junction，再重建。可反复执行。
       3. 只删"指向本仓库"的 junction —— 绝不触碰 agent 自带技能（如 Codex 的 .system、CodeWhale 的 bundled）。
 
@@ -40,6 +42,7 @@ $Targets = @(
     @{ Agent = 'Claude Code'; Dir = Join-Path $env:USERPROFILE '.claude\skills' }
     @{ Agent = 'Codex';       Dir = Join-Path $env:USERPROFILE '.codex\skills' }
     @{ Agent = 'CodeWhale';   Dir = Join-Path $env:USERPROFILE '.codewhale\skills' }
+    @{ Agent = 'Antigravity'; Dir = Join-Path $env:USERPROFILE '.gemini\skills' }
 )
 
 # ---- 从仓库结构推导技能清单（<category>\<skill>\SKILL.md，两段式）----

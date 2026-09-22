@@ -114,18 +114,19 @@ powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1          
 powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1 -WhatIf  # 预演
 ```
 
-当前目标：`~/.claude/skills`（Claude Code）、`~/.codex/skills`（Codex）、`~/.codewhale/skills`（CodeWhale）。
+当前目标：`~/.claude/skills`（Claude Code）、`~/.codex/skills`（Codex）、`~/.codewhale/skills`（CodeWhale）、`~/.gemini/skills`（antigravity-cli 用户级）。
 脚本**只删指向本仓库的旧链接**，绝不触碰 agent 自带技能（如 Codex 的 `.system/`、CodeWhale 的 bundled）。
 
-### antigravity-cli（走共享位置，不靠脚本同步）
+### antigravity-cli（用户级逐技能 junction + 共享位置）
 
 | 项 | 路径 |
 |:--|:--|
-| 技能目录 | `~/.agents/skills` → 本仓库（符号链接） |
-| 技能目录（备用） | `~/.gemini/config/skills` → 本仓库（符号链接） |
-| 技能注册 | `~/.gemini/config/skills.json` 的 `entries` 含 `D:/GTMI/Skills` |
+| 技能目录（用户级） | `~/.gemini/skills/<skill>` —— 逐技能 junction，**已纳入 `sync-agent-skills.ps1`** |
+| 技能目录（共享位置） | `~/.agents/skills` → 本仓库（符号链接）；工作区级 `<ws>/.agents/skills` 同形态 |
+| 技能注册 | `~/.gemini/config/skills.json` 的 `entries` 含 `D:/GTMI/Skills`（**只保留仓库根条目**；历史重构留下的具体技能路径会悬空，需清理） |
 | 规则加载 | `~/.agents/rules/*.md`（已有 `antigravity-rtk-rules.md`）、`~/.gemini/GEMINI.md` |
-新增 / 改名技能后重跑一次即可。
+
+新增 / 改名 / 拆分技能后重跑一次脚本即可——用户级目录由脚本维护，不再手工挂链。
 
 ---
 
