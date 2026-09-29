@@ -136,4 +136,4 @@ powershell -ExecutionPolicy Bypass -File scripts\sync-agent-skills.ps1 -WhatIf  
 - **禁止词表穷举**：行为判定用语义判据（如"授权 = 对具体动作的放行语义"），不得写成待匹配的关键词列表——词表必漏，且与语义判断冲突。
 - **禁止双重容器**：同一份规则不得同时以"技能"和"AGENTS.md 条目"两种身份存在。
 - 新增/删减技能时，同步更新本文件的技能索引。
-- `tempCache/` 不入版本库（见 `.gitignore`）。
+- `.tempcache/` 不入版本库（见 `.gitignore`）。

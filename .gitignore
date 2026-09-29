@@ -1,5 +1,5 @@
 # 临时产物（可整体清理，不入版本库）
-tempCache/
+.tempcache/
 
 # 编辑器 / 系统
 .DS_Store
