@@ -4,10 +4,12 @@ description: >-
   Cross-language code delivery standards: the 500-line single-file redline and how to split by responsibility,
   directory/package layering (when a package must split, responsibility-based grouping, migration discipline),
   comment hygiene (usage-first API docs; no design-history, design-rationale, or changelog comments),
-  README maintenance & structure policy, and temp-artifact discipline.
+  README maintenance & structure policy, temp-artifact discipline, and plan-document lifecycle
+  (active vs archived plan dirs, per-item status, delete-on-completion, directory README as handoff index).
   Use when writing, modifying, refactoring, splitting, or reviewing source files; when a package grows crowded
   or a module's file layout needs reorganizing; when creating or renaming modules; when adding comments or
-  public APIs; or when producing debug logs, scratch scripts, or temp captures.
+  public APIs; when drafting or updating a multi-phase plan or its index; or when producing debug logs,
+  scratch scripts, or temp captures.
 ---
 
 # 代码交付准则 (Code Standards)
@@ -82,3 +84,16 @@ description: >-
 - **模块 vs 包**：模块边界回答「谁拥有这摊事」，包分层回答「模块内怎么找文件」——两个独立问题，都按本节触发条件处理。
 - **迁移纪律**：一次一批（一个模块一批）；改完立刻跑该模块测试 + 全量构建；**构建绿 ≠ 测试跑了**——核对测试报告用例计数 > 0；批量 import 重写先 dry-run 逐文件核对。
 - **决策留痕**：成规模重排（跨模块、改公共包名）先立 ADR / 决策记录；阈值与命名口径写进项目规范，不靠手感。
+
+---
+
+## 六 · 计划文档生命周期
+
+多阶段 / 多期计划（切片计划、里程碑计划、跨会话长计划）的文档形态与收口纪律。**单次任务的子步骤清单不适用**——不建计划文档、不进索引。
+
+- **双目录分工**：项目内维护两处——**执行中计划目录**（如 `docs/todo/`）与**历史归档目录**（如 `docs/plans/`）。多期计划一律起草到执行中目录，**不进**归档目录；归档目录冻结，不再新增。
+- **逐项状态即进度真相**：计划内任务逐项带状态——未完成 `- [ ]`，完成改 `- [x]（日期）`，**完成一项即标一项**，不批量补记。
+- **完成即销毁**：计划全部任务完成后**删除该计划文档**，并同步更新执行中目录 README 清单；完成痕迹由 changelog 与 git 承载，计划文档本身不作成果沉淀。
+- **目录 README = 交接索引**：执行中目录必须维护 `README.md`，作为 **clear context 后第一读物**，含三块——**计划索引表**（计划链接 | 状态 | 说明，并置顶「先看这里」的接续指引）、**遗留表**（编号 `L1 / L2 …`，收容非计划内的悬置项）、**待讨论区**（未讨论清楚的构想进独立子目录，不落地为计划文档，讨论清楚后再转正）。
+
+> 模板、状态词口径、判例：[`references/plan-doc-lifecycle.md`](references/plan-doc-lifecycle.md)

@@ -24,7 +24,7 @@
 | 技能 | 覆盖内容 |
 |:--|:--|
 | [`collaboration-discipline`](general/collaboration-discipline/SKILL.md) | 授权粒度三档、诊断与修复权界、任务边界、存疑即停、客观直率、目标平台优先级 |
-| [`code-standards`](general/code-standards/SKILL.md) | 500 行红线与拆分手法、目录与包分层（分包规则：阈值触发 / 按职责分包 / 迁移纪律）、注释规范（面向使用者；禁设计沿革/论证/变更史）、架构文档同步（根/模块 README 逐文件职责模板）、临时产物纪律 |
+| [`code-standards`](general/code-standards/SKILL.md) | 500 行红线与拆分手法、目录与包分层（分包规则：阈值触发 / 按职责分包 / 迁移纪律）、注释规范（面向使用者；禁设计沿革/论证/变更史）、架构文档同步（根/模块 README 逐文件职责模板）、临时产物纪律、计划文档生命周期（执行中/归档双目录 · 逐项状态 · 完成即删 · 目录 README 交接索引） |
 | [`file-architecture`](general/file-architecture/SKILL.md) | 文件架构设计判据：可读性模型（两跳定位 / 一名一义 / 自描述命名）、功能优先的切分序与规模启发式（≤2 平铺 / ≥3 建目录）、CCP·Parnas·复用范围判据、依赖方向纪律、假分反模式 |
 | [`evidence-research`](general/evidence-research/SKILL.md) | 事实查验四级执行序、免费网络检索、结构化数据完整性、交叉核对与溯源 |
 
