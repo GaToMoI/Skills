@@ -1,54 +1,54 @@
-# 临时产物纪律 (Temp Artifact Discipline)
+# Temp Artifact Discipline
 
-> 准确定位：本文件是 `code-standards` 技能「四 · 临时产物纪律」的展开细则与判例。
+> Scope: this file expands on "4 · Temp-artifact discipline" in the `code-standards` skill.
 
 ---
 
-## 1. 产物分级：否定式默认桶
+## 1. Artifact tiers: the default bucket
 
-**判据只有一问：「这文件进版本库吗？」** 不要靠记忆穷举「哪些算临时」——按否定式分类，除前两类外**均为临时**。
+**The only question: "Does this file belong in version control?"** Do not try to enumerate "what counts as temp" from memory — classify negatively; **everything outside the first two classes is temp**.
 
-| 类别 | 判据 | 去处 | 入版本库 |
+| Class | Criterion | Destination | Tracked |
 |:--|:--|:--|:--|
-| **项目产物** | 项目本身的一部分：源码、配置、文档、资源 | 原位 | ✅ |
-| **构建输出** | 项目自己能再生成：`build/`、`.gradle/`、`node_modules/`、构建工具直接产出的 jar/zip | 原位 | ❌（gitignore） |
-| **临时产物** | 既不入库也不能由构建再生成：日志、一次性脚本、临时截图、抓取中间件、手动复制或重命名用于测试的包、导出物 | `<repo>/.tempcache/` | ❌（整体忽略） |
-| **实验产物** | 有引用价值：被文档引用的演示稿、试验模块、调研溯源证据 | 仓库实验区目录 | ✅ 按需 |
+| **Project artifact** | Part of the project: source, config, docs, resources | In place | ✅ |
+| **Build output** | Regenerable by the project: `build/`, `.gradle/`, `node_modules/`, jars/zips produced directly by the build tool | In place | ❌ (gitignored) |
+| **Temp artifact** | Neither tracked nor regenerable: logs, one-off scripts, temp screenshots, scraping intermediates, packages copied or renamed for testing, exports | `<repo>/.tempcache/` | ❌ (ignored wholesale) |
+| **Experiment artifact** | Has reference value: demos cited by docs, spike modules, research evidence | The repo's experiment directory | ✅ as needed |
 
-**两个易错边界**：
+**Two boundaries that are easy to get wrong**:
 
-- **手动打的包**：由构建工具直接产出在 `build/` 下的 → 构建输出，原位；从中复制/重命名出来专门用于测试或交付验证的 → **临时产物**，进 `.tempcache/`。
-- **实验产物 vs 临时产物**：只有「已被文档引用」才能升级为实验产物；未被引用的演示稿、脚本一律留在 `.tempcache/`，不得占实验区。
+- **Hand-made packages**: produced directly by the build tool under `build/` → build output, stays in place; copied or renamed out of it for testing or delivery verification → **temp artifact**, goes to `.tempcache/`.
+- **Experiment vs temp**: only "already cited by a document" earns promotion to experiment artifact; uncited demos and scripts stay in `.tempcache/` and must not occupy the experiment area.
 
-**判不出来时**：按临时产物处理（默认桶原则——宁可放错到 `.tempcache/` 被一次清掉，也不要污染仓库结构）。
-
----
-
-## 2. .tempcache 内部规范
-
-`.tempcache/` 不是垃圾桶，内部同样遵循所在仓库的文件架构规范：
-
-- **按用途分子目录**：`.tempcache/logs/`、`.tempcache/scratch/`、`.tempcache/captures/`。
-- **语义化命名**：`login-timeout-repro-20260911.log`。
-- 🚫 **严禁**序号副本式堆叠：`test1.sh`、`test2.sh`、`test_new.sh`、`test_final.sh`。
-- **可随时整体清理**，不留悬空引用——即：仓库中不得有任何文档、脚本、配置**引用** `.tempcache/` 内的文件。
+**When you cannot decide**: treat it as a temp artifact (default bucket — better to have it swept away with `.tempcache/` than to pollute the repo structure).
 
 ---
 
-## 3. 高频违规判例
+## 2. Inside `.tempcache/`
 
-| 违规 | 问题 | 正确做法 |
+`.tempcache/` is not a bin; internally it follows the host repo's file-architecture rules:
+
+- **Subdirectories by purpose**: `.tempcache/logs/`, `.tempcache/scratch/`, `.tempcache/captures/`.
+- **Semantic names**: `login-timeout-repro-20260911.log`.
+- 🚫 **Never** stack numbered copies: `test1.sh`, `test2.sh`, `test_new.sh`, `test_final.sh`.
+- **Deletable wholesale at any time**, leaving no dangling references — i.e. no document, script, or config in the repo may **reference** a file inside `.tempcache/`.
+
+---
+
+## 3. Common violations
+
+| Violation | Problem | Correct handling |
 |:--|:--|:--|
-| 调试脚本丢在仓库根 | 污染工程结构、被误提交 | 移到 `.tempcache/scratch/` |
-| 日志原地堆在模块目录 | 模块 README 与实际内容不符 | 移到 `.tempcache/logs/` |
-| 用 `test_final_v2` 命名 | 无法判断有效性、不敢删 | 语义化命名 + 时间戳 |
-| 文档引用了临时截图 | 清理 .tempcache 后文档挂掉 | 截图升级为实验产物，存实验区 |
-| 把 `build/` 产物也搬进 `.tempcache/` | 混了两类，破坏构建信任（下次构建发现文件没了） | 构建输出原位 + gitignore |
-| 产出一个「不知道干嘛」的文件就丢仓库根 | 项目结构可读性直接崩坏，且无人敢删 | 先判「进版本库吗」，判不出走 `.tempcache/` |
+| Debug script dropped in the repo root | Pollutes the project structure, risks being committed | Move to `.tempcache/scratch/` |
+| Logs piling up in a module directory | The module README no longer matches reality | Move to `.tempcache/logs/` |
+| Naming things `test_final_v2` | Nobody can tell what is valid, so nobody dares delete | Semantic name + timestamp |
+| Docs referencing a temp screenshot | Docs break when `.tempcache/` is cleaned | Promote the screenshot to an experiment artifact |
+| Moving `build/` output into `.tempcache/` | Mixes two classes and breaks build trust (the next build finds files gone) | Build output stays in place + gitignored |
+| Dumping an "I don't know what this is" file into the repo root | Structural readability collapses and nobody dares delete it | Ask "tracked or not?" first; if undecidable, use `.tempcache/` |
 
 ---
 
-## 4. 与文档同步准则的交叉
+## 4. Intersection with doc-sync rules
 
-删除/移动文件时，若该文件被 README 引用，**必须同次更新引用**（见 `code-standards` 技能「三 · 架构文档同步」）。
-反之，若某产物被文档引用，它**不能再留在 `.tempcache/`**——应升级为实验产物。
+When deleting or moving a file that a README references, **update the reference in the same task** (see "3 · Keeping architecture docs in sync" in `code-standards`).
+Conversely, any artifact referenced by a document **may no longer stay in `.tempcache/`** — promote it to an experiment artifact.

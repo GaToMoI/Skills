@@ -31,7 +31,7 @@ Cross-language (Kotlin / Java / C++ / Swift / TS / C# …) rules for source size
 | Java / C# | Composition over inheritance, lift inner classes out |
 | C++ | Headers ≤ 300 lines, Pimpl, move algorithms into their own translation unit |
 
-> Full table with per-language examples: [`references/universal-code-redline.md`](references/universal-code-redline.md) (zh)
+> Full table with per-language examples: [`references/universal-code-redline.md`](references/universal-code-redline.md)
 
 ---
 
@@ -78,7 +78,7 @@ The only question to answer: **"Does this file belong in version control?"**
 - `.tempcache/` may be deleted wholesale at any time; nothing may reference files inside it.
 - The experiment area keeps only **referenced artifacts** (demos cited by docs, spike modules, research evidence).
 
-> Details: [`references/temp-artifacts-discipline.md`](references/temp-artifacts-discipline.md) (zh)
+> Details: [`references/temp-artifacts-discipline.md`](references/temp-artifacts-discipline.md)
 
 ---
 

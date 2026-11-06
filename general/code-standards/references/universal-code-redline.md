@@ -1,34 +1,35 @@
-# 准则四：全语言通用源码体量红线与模块化拆分 (Universal File Size Redline & Modularity)
+# Universal File-Size Redline and Modularity
 
-## 1. 核心原则
-1. **500 行通用硬红线**：
-   * **所有面向对象与系统编程语言的源码文件（包括 Kotlin、Java、C++、Swift、TypeScript、C# 等），单个文件原则上严禁超过 500 行**。
-   * 推荐的健康代码体量区间为 **100 ~ 300 行**。
-2. **主动审查与职责解耦**：
-   * 一旦单个文件体量逼近 400~500 行，必须在编码过程中主动进行单一职责审查，实施物理拆分，严禁堆砌“上帝类 (God Class)”或无序合并组件。
-   * 拆分后的文件需保持清晰的**单一职责原则（Single Responsibility Principle）**，实现高内聚、低耦合。
+## 1. Core principles
+
+1. **The 500-line universal hard redline**:
+   - **Every source file in an object-oriented or systems language (Kotlin, Java, C++, Swift, TypeScript, C#, …) must not exceed 500 lines.**
+   - The recommended healthy range is **100–300 lines**.
+2. **Proactive review and responsibility decoupling**:
+   - As soon as a file approaches 400–500 lines, review it for single responsibility *while coding* and split it physically. Never pile up god classes or merge components without order.
+   - Split files must keep a clear **Single Responsibility Principle**: high cohesion, low coupling.
 
 ---
 
-## 2. 各主流语言形态拆分手法指南
+## 2. Splitting tactics per language family
 
-### 1. Kotlin / Swift / 现代化高表现力语言
-* **现象**：语法高度精炼，500 行的逻辑密度通常相当于传统 Java/C++ 的 1000~1500 行。
-* **拆分手法**：
-  * **UI 组件解耦**：将大型页面拆解为独立的 SubComponent、Card、Bar 等小组件文件；
-  * **顶层扩展提炼**：将领域特定的数据映射、工具函数抽取为独立的 `XxxExt.kt` 文件；
-  * **状态容器剥离**：将 UI 状态与业务驱动逻辑收敛至独立 ViewModel / StateStore 文件中。
+### 1. Kotlin / Swift / modern expressive languages
+* **Symptom**: the syntax is dense, so 500 lines here carry roughly the logic of 1000–1500 lines of traditional Java/C++.
+* **Tactics**:
+  * **Decouple UI components**: break large screens into separate SubComponent, Card, Bar files;
+  * **Extract top-level extensions**: move domain-specific data mapping and helpers into `XxxExt.kt` files;
+  * **Separate the state container**: move UI state and the logic driving it into a dedicated ViewModel / StateStore file.
 
-### 2. Java / C# 经典企业级语言
-* **现象**：类型严谨、存在较多样板代码，类极易过度膨胀。
-* **拆分手法**：
-  * **组合优于继承**：将大类按业务切面拆分成多个独立协作的 Service / Delegate / Strategy 类；
-  * **现代特性瘦身**：使用 Java 14+ `record`、Lombok 等注解消除无意义的 Getter/Setter/Constructor 样板；
-  * **内部类外提**：将大型静态内部类、枚举或 DTO 提取为独立的独立顶层类文件。
+### 2. Java / C# classic enterprise languages
+* **Symptom**: strict typing and plenty of boilerplate make classes inflate easily.
+* **Tactics**:
+  * **Composition over inheritance**: split a large class along business facets into collaborating Service / Delegate / Strategy classes;
+  * **Trim with modern features**: use Java 14+ `record`, Lombok annotations, and the like to remove meaningless getters/setters/constructors;
+  * **Lift inner classes out**: promote large static inner classes, enums, and DTOs into standalone top-level files.
 
-### 3. C++ / 系统级编译型语言
-* **现象**：声明与实现分离（`.h`/`.hpp` 与 `.cpp`），单文件体积直接决定预编译开销与编译链接耗时。
-* **拆分手法**：
-  * **头文件严控（≤ 300 行）**：头文件只保留纯粹的接口声明与类结构，严禁无序内联大型实现，防止包含级联膨胀；
-  * **实现文件（≤ 500 行）**：通过 **Pimpl 惯用法**（Pointer to Implementation）隐藏私有实现细节；
-  * **算法与功能隔离**：将复杂算法剥离至独立的翻译单元（`.cpp`）或内部实现头文件（`detail/`）。
+### 3. C++ / systems-level compiled languages
+* **Symptom**: declaration and implementation are split (`.h`/`.hpp` vs `.cpp`), and file size directly drives preprocessing, compile, and link time.
+* **Tactics**:
+  * **Keep headers under control (≤ 300 lines)**: headers hold interface declarations and class structure only; never inline large implementations, which causes cascading include bloat;
+  * **Implementation files (≤ 500 lines)**: hide private implementation behind the **Pimpl idiom** (pointer to implementation);
+  * **Isolate algorithms**: move complex algorithms into their own translation unit (`.cpp`) or an internal header under `detail/`.

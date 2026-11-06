@@ -34,4 +34,4 @@ description: >-
 
 Before drawing any screen or icon, ask: **"Is this position an icon slot? If so — did the design source provide an asset? If not, is my icon from the official icon library?"**
 
-> Full criteria: [`references/ui-asset-guidelines.md`](references/ui-asset-guidelines.md) (zh)
+> Full criteria: [`references/ui-asset-guidelines.md`](references/ui-asset-guidelines.md)

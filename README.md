@@ -27,13 +27,13 @@ A cross-project, cross-language library of **AI collaboration skills**, followin
 | `SKILL.zh.md` | Chinese | No — explanatory mirror | **No** (the loader only picks up `SKILL.md`) |
 | `README.md` | English | **Yes** | No |
 | `README.zh.md` | Chinese | No — explanatory mirror | No |
-| `references/**` | **Chinese only for now** | Payload, referenced from L1 | No |
+| `references/**` | **Mixed** | Payload, referenced from L1 | No |
 
 Consequences of this split:
 
 - **No extra index cost.** Mirrors are never registered, so the resident description set does not double.
 - **Rule changes land in English first**, then get synced to the mirror. A mirror may lag; the English text always wins.
-- **`references/` are still Chinese-only.** The English L1 marks those links with `(zh)`. Translating payloads is staged separately and filtered by *"is this useful outside one person's machine?"* — not by file size.
+- **`references/` are partly translated.** Rules that generalise across environments are already English (keep `SKILL.md`-level parity); machine-specific payloads stay Chinese and their links carry `(zh)`.
 
 ---
 

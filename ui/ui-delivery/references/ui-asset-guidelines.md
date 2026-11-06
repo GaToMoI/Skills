@@ -1,16 +1,18 @@
-# 准则七：UI 资产与图标规范（分级条件触发） (UI Asset & Icon Guidelines with Preconditions)
+# UI Assets and Icons (conditional tiers)
 
-## 1. 核心原则（分级条件触发）
+## 1. Core principle
 
-### 场景 A：具备设计源时（存在 Figma MCP、蓝湖 MCP 或本地设计文件）
-1. **严格执行规范切图**：
-   * 严禁使用富文本（如 inline styled text、Unicode 特殊字符拼凑图形、富文本标签拼接等）来替代界面中的图标或矢量图形；
-2. **高清规范资产沉淀**：
-   * 必须通过 Figma MCP（或蓝湖 MCP / 设计稿切图源）导出高清规范资产（PNG / SVG 格式）沉淀至工程的标准资产目录（如 `assets/icons/` 或 `res/drawable/`）；
-   * 通过标准图片/图标组件（如 `EditorIcon` / `Image` / `ImageView`）统一加载与渲染，保证各端渲染像素级还原与高质量表现。
+### Case A — a design source exists (Figma MCP, Lanhu MCP, or local design files)
 
-### 场景 B：无设计源 / 原型开发阶段（无外部 MCP 或设计源）
-1. **采用平台标准矢量图**：
-   * 优先使用目标平台标准矢量图标库（如 Material Icons、Jetpack VectorDrawable、SF Symbols）；
-2. **主动提示补充资产**：
-   * 明确向用户提示需要补充正规切图资产，严禁用不可控富文本伪造复杂业务图形。
+1. **Export proper assets, strictly**:
+   - Never substitute rich text (inline styled text, Unicode characters assembled into shapes, rich-text tag composition) for icons or vector graphics in the UI.
+2. **Commit high-fidelity assets**:
+   - Export proper PNG / SVG assets via the design source into the project's standard asset directory (e.g. `assets/icons/` or `res/drawable/`);
+   - Load and render them through the standard image/icon components (`EditorIcon` / `Image` / `ImageView`) so every platform renders pixel-accurately.
+
+### Case B — no design source / prototype phase (no external MCP or design files)
+
+1. **Use the platform's standard vectors**:
+   - Prefer the target platform's standard vector icon library (Material Icons, Jetpack VectorDrawable, SF Symbols).
+2. **Ask for real assets**:
+   - Tell the user explicitly that proper assets need to be supplied. Never fake complex business graphics with uncontrolled rich text.

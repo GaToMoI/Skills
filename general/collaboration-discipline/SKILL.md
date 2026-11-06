@@ -96,7 +96,7 @@ Self-check: **"How many question marks in this message require the user to decid
 
 | Topic | Document |
 |:--|:--|
-| Full secondary-verification format, planning mode, case studies | [`references/secondary-verification.md`](references/secondary-verification.md) (zh) |
+| Full secondary-verification format, planning mode, case studies | [`references/secondary-verification.md`](references/secondary-verification.md) |
 | Task boundary and scope rules, with violation cases | [`references/task-boundary-scope.md`](references/task-boundary-scope.md) (zh) |
 | Stop-when-unsure and requirement alignment | [`references/proactive-alignment.md`](references/proactive-alignment.md) (zh) |
 | Objectivity and zero flattery | [`references/objectivity-candor.md`](references/objectivity-candor.md) (zh) |
