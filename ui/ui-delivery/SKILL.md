@@ -7,31 +7,31 @@ description: >-
   slot, empty state, badge, or navigation element.
 ---
 
-# UI 资产与图标规范 (UI Delivery)
+# UI Assets and Icons
 
-**条件触发**：按下表判定走哪条路，两条路的禁止项不同。
+**Conditional**: decide the path from the table below — the two paths have different prohibitions.
 
 ---
 
-## 分级判定
+## Tier decision
 
-| 条件 | 必须做 | 严禁 |
+| Condition | Required | Forbidden |
 |:--|:--|:--|
-| **有设计源**（Figma / 蓝湖 MCP 等） | 导出规范切图（PNG / SVG），入标准资产目录 | 字符拟态、富文本拼图形 |
-| **无设计源** | 用平台标准矢量图标库；**主动提示用户补充正规切图资产** | 字符拟态替代 |
+| **Design source exists** (Figma / Lanhu MCP, etc.) | Export proper assets (PNG / SVG) into the standard asset directory | Character mimicry, rich text assembled into shapes |
+| **No design source** | Use the platform's standard vector icon library; **actively ask the user to supply real assets** | Character mimicry as a substitute |
 
 ---
 
-## 图标位铁律
+## Icon-slot rule
 
-- **图标位**（导航 / 按钮 / 状态 / 角标 / 空态等**任何需要图标的地方**）一律使用**当前技术栈官方图标库**提供的真实图标。
-- **严禁**用颜文字、Emoji、特殊字符充当图标。
-- **例外**：界面正文与内容性字符装饰**不属于**图标位，不受此限。
+- **Icon slots** (navigation / buttons / status / badges / empty states — **anywhere an icon is expected**) always use real icons from the **official icon library of the current stack**.
+- **Never** use kaomoji, emoji, or special characters as icons.
+- **Exception**: body copy and content-level character ornamentation are **not** icon slots and are exempt.
 
 ---
 
-## 自检
+## Self-check
 
-动手画界面/图标前问一句：**「这个位置是图标位吗？如果是——设计源给了切图吗？没有的话，我用的图标来自官方图标库吗？」**
+Before drawing any screen or icon, ask: **"Is this position an icon slot? If so — did the design source provide an asset? If not, is my icon from the official icon library?"**
 
-> 完整判定口径：[`references/ui-asset-guidelines.md`](references/ui-asset-guidelines.md)
+> Full criteria: [`references/ui-asset-guidelines.md`](references/ui-asset-guidelines.md) (zh)

@@ -8,47 +8,47 @@ description: >-
   technologies; when scraping or parsing web pages, JSON, tables, or logs; or when a number or fact must be cited.
 ---
 
-# 查证与数据获取 (Evidence & Research)
+# Evidence & Research
 
-**核心禁令：严禁凭记忆下技术断言。** 构建系统 / 语言标准 / 框架 API 的行为必须以官方文档或本地真实工程为依据。
+**Core prohibition: never assert technical facts from memory.** The behaviour of build systems, language standards, and framework APIs must rest on official documentation or a real local project.
 
 ---
 
-## 一 · 四级低 Token 执行序
+## 1 · Four-tier low-token lookup order
 
-按序升级，命中即停：
+Escalate in order; stop at the first hit:
 
-| 级别 | 手段 | 约束 |
+| Tier | Means | Constraint |
 |:--|:--|:--|
-| **①** | 本地工程用例检索（`fd` / `rg`） | 限定路径；**严禁全盘 `find /`** |
-| **②** | 本地 SDK / 依赖源码定向切片 | 直接读所需文件与行段，不整包通读 |
-| **③** | 精准社区检索 | 须过 **4 步验证**（见下） |
-| **④** | 最小沙盒实测 | 日志必须过滤，**严禁全量灌入上下文** |
+| **①** | Search the local project (`fd` / `rg`) | Scoped paths; **never a full-disk `find /`** |
+| **②** | Read a targeted slice of local SDK / dependency source | Read the needed files and line ranges, never the whole artifact |
+| **③** | Targeted community search | Must pass the **4-step check** (below) |
+| **④** | Minimal sandbox experiment | Filter the logs; **never dump full output into context** |
 
-**③ 级 4 步验证**：版本对齐 → 副作用审查 → 本地最小验证 → 透明披露。
-**结论必须有证据链**：代码依据、文件行号或官方规范，可验证、可复现。
+**Tier ③ 4-step check**: version alignment → side-effect review → minimal local verification → transparent disclosure.
+**Every conclusion needs a chain of evidence**: code reference, file line number, or official spec — verifiable and reproducible.
 
-> SOP 全文：[`references/token-optimization-sop.md`](references/token-optimization-sop.md)
-> 准则细则：[`references/fact-checking.md`](references/fact-checking.md)
+> Full SOP: [`references/token-optimization-sop.md`](references/token-optimization-sop.md) (zh)
+> Detailed criteria: [`references/fact-checking.md`](references/fact-checking.md) (zh)
 
 ---
 
-## 二 · 网络数据获取：免费方案优先
+## 2 · Web data acquisition: free options first
 
-| 场景 | 首选 | 禁止 |
+| Scenario | Prefer | Forbidden |
 |:--|:--|:--|
-| 搜索 / 抓网页正文 | `websearch` / `ddgs`（**免费、无需 key**） | 🚫 `curl` 抓搜索引擎 HTML |
-| REST API | `curl` + `jq` | 🚫 原始 JSON 直接灌入上下文 |
+| Search / fetch page body | `websearch` / `ddgs` (**free, no key**) | 🚫 `curl` against a search engine's HTML |
+| REST API | `curl` + `jq` | 🚫 raw JSON piped straight into context |
 
-> 工具清单与用法：[`references/web-data-search-free.md`](references/web-data-search-free.md)
+> Tool list and usage: [`references/web-data-search-free.md`](references/web-data-search-free.md) (zh)
 
 ---
 
-## 三 · 结构化数据完整性
+## 3 · Structured-data integrity
 
-- 结构化数据（HTML 表格 / JSON / 日志）**禁止线性化剥取**，必须保留 **「值 ↔ 字段」** 对应关系，防整体错位。
-- 多来源数据第一时间交叉核对；不一致时**以官方为准**并向用户标注。
-- 异常数字（数量级离谱）必须**停下回查**，严禁带先入为主采信。
-- 结论必须**可溯源**：来源 URL / 抓取文件 + 时间。
+- Structured data (HTML tables / JSON / logs) must **never be flattened by linear extraction**; preserve the **value ↔ field** mapping to prevent wholesale misalignment.
+- Cross-check multiple sources immediately; when they disagree, **official sources win**, and say so to the user.
+- Anomalous numbers (off by orders of magnitude) require **stopping to re-verify** — never accept them with a preconception.
+- Conclusions must be **traceable**: source URL / captured file, plus timestamp.
 
-> 判例与反例：[`references/data-acquisition-integrity.md`](references/data-acquisition-integrity.md)
+> Cases and counter-examples: [`references/data-acquisition-integrity.md`](references/data-acquisition-integrity.md) (zh)

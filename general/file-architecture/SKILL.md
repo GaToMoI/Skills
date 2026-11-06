@@ -11,79 +11,79 @@ description: >-
   reviewing a crowded directory, or judging whether an existing structure needs adjustment.
 ---
 
-# 文件架构准则 (File Architecture)
+# File Architecture
 
-面向「人找文件」与「功能可搬移」的**设计期**判据。**存量审查阈值与迁移纪律**见 [`code-standards`](../code-standards/SKILL.md) § 五；本技能管**规划期怎么想、按什么切、增量期怎么复核**。
+**Design-time** criteria aimed at "humans find files" and "features stay movable". **Existing-code thresholds and migration discipline** live in [`code-standards`](../code-standards/SKILL.md) §5; this skill covers **how to think while planning, what to split along, and how to re-check incrementally**.
 
 ---
 
-## 一 · 可读性目标模型
+## 1 · The readability target model
 
-判据只有一条：**一个人能否用最短路径定位到目标文件**。
+Exactly one criterion: **can a person reach the target file by the shortest path?**
 
-- **两跳定位**：意图 → 模块/层 → 功能面目录 → 文件。每一跳都靠名称回答"里面装的是什么"，不靠记忆路径。
-- **目录与文件名 = 关键词索引**：找文件的人通常不知道文件叫什么，只知道它**做什么**——名称必须描述"做什么"（领域词），而不是"是什么类型"。
-- **一名一义**：同一概念全库只有一个名字。同义词漂移（如「卡片」与「work item」混用）会让关键词检索漏掉一半；概念词以项目设计文档为单一来源。
-- **一文件一主题**：混装文件会让同一特征的行散落在不相干上下文里，找到也读不懂。
+- **Two-hop lookup**: intent → module/layer → feature directory → file. Every hop is answered by a name describing *what is inside*, never by memorised paths.
+- **Directory and file names are a keyword index**: the person looking usually does not know what the file is called, only **what it does** — so names must describe the *doing* (domain word), not the *type*.
+- **One word, one concept**: one name per concept across the whole codebase. Synonym drift (e.g. "card" and "work item" used interchangeably) makes keyword search miss half the hits; the project's design docs are the single source for concept words.
+- **One file, one topic**: mixed files scatter the lines of a single trait across unrelated contexts — found, but unreadable.
 
-## 二 · 切分优先序
+## 2 · Splitting priority order
 
-1. **第一层：按功能面切**——功能（一组协同实现同一概念的文件）是分包的基本单位；
-2. **第二层：功能内按职责切**——UI / 状态 / 数据。
+1. **First cut: by feature** — a feature (a set of files that jointly implement one concept) is the unit of packaging;
+2. **Second cut: within a feature, by responsibility** — UI / state / data.
 
-维度细节（按职责面/领域、禁止按类型横切）见 [`code-standards`](../code-standards/SKILL.md) § 五。
+Dimension details (sort by responsibility surface or domain; never slice by type) are in [`code-standards`](../code-standards/SKILL.md) §5.
 
-**规模启发式**（预判触发，只用于回答"值不值得建包"）：
+**Size heuristics** (pre-judgement triggers, only answering "is a package worth creating?"):
 
-| 情形 | 处理 |
+| Situation | Handling |
 |:--|:--|
-| 功能总产出 ≤ 2 个文件 | 不建包，平铺即可 |
-| 预判 UI 侧（遵守 500 行规范后）≥ 3 个文件 | 建功能目录，文件按职责命名 |
-| 状态 / 数据类 | 按复用范围定——单功能用跟功能走；多功能用上提共享层 |
+| Feature totals ≤ 2 files | No package; keep them flat |
+| Predicted UI side (after honouring the 500-line rule) ≥ 3 files | Create a feature directory; name files by responsibility |
+| State / data classes | Decide by reuse scope — single-feature use travels with the feature; multi-feature use is lifted into a shared layer |
 
-数字只是触发器，**分不分由下一节判据裁决**。
+The numbers are only triggers; **whether to split is decided by the next section**.
 
-## 三 · 判据三连
+## 3 · The three-part test
 
-1. **变更原因（CCP · 共同闭包原则）**：一起变更的放一起。"功能"只是"一起变"最常见的形态，判据本身是"谁和谁总是一起改"——一个功能内从不一起变的两块值得再分，两个功能共享的常变块该上提。
-2. **信息隐藏（Parnas）自检**：动手前问 "**这个包要隐藏的秘密是什么？**"——答得出（如 zone 包藏命中/缩放算法）才是模块；答不出（只是把同类文件归拢）就只是分类，收益近乎零。
-3. **复用范围（CRP · 共同复用原则）**：一起被复用的放一起，不强迫使用者依赖无关物——"整目录 copy 走"能否成立，由这条裁决。
+1. **Reason to change (CCP · Common Closure Principle)**: things that change together belong together. "Feature" is merely the most common shape of "changes together" — the criterion itself is *who always changes with whom*. Two halves of a feature that never change together deserve another split; a frequently changing block shared by two features should be lifted.
+2. **Information hiding (Parnas) self-check**: before acting, ask **"what secret is this package hiding?"** If you can answer (e.g. the zone package hides hit-testing and zoom algorithms), it is a module. If you cannot (you merely grouped similar files), it is a classification, and the payoff is near zero.
+3. **Reuse scope (CRP · Common Reuse Principle)**: things reused together belong together; never force a consumer to depend on unrelated material. This is what decides whether "copy the whole directory out" holds.
 
-## 四 · 流程三阶段
+## 4 · Three-phase process
 
-1. **规划期**：设计功能的同时设计文件落位——预判规模，定包结构；
-2. **实现期**：按计划落位，该分就分，不先挤进一个文件等以后拆；
-3. **增量期**：新增功能先判落点，同时复核既有结构是否需要调整。
+1. **Planning**: design file placement alongside the feature — predict size, settle the package structure;
+2. **Implementation**: place as planned; split when needed rather than cramming into one file "to split later";
+3. **Incremental**: judge the landing spot for every new feature, and simultaneously re-check whether the existing structure needs adjustment.
 
-**复核权重不低于预判**：预判常低估而非高估——辅助件（dialog / overlay / probe / readout）多是增量期长出来的。
+**Re-checking weighs no less than pre-judgement**: predictions tend to underestimate — dialogs, overlays, probes, and readouts usually grow during the incremental phase.
 
-## 五 · 依赖方向纪律
+## 5 · Dependency-direction discipline
 
-包边界只有配合依赖纪律才成立，否则"按功能分包"只是换了名字的平铺。
+Package boundaries only hold together with dependency discipline; otherwise "package by feature" is flat layout with new names.
 
-- 跨包依赖**单向、无环**，不得互相反向 import；
-- 共用件一经出现即上提（多功能复用 → 共享/契约层），不留两处拷贝；
-- **目录边界 ≈ 依赖边界**：目录内文件若反向依赖目录外的私有件，"整目录搬走"就不成立。
+- Cross-package dependencies are **one-directional and acyclic** — no reverse imports;
+- Shared pieces are lifted the moment they appear (multi-feature reuse → shared/contract layer); never leave two copies;
+- **Directory boundary ≈ dependency boundary**: if files inside a directory reach back to private files outside it, "move the whole directory" no longer holds.
 
-## 六 · 反模式（假分）
+## 6 · Antipatterns (fake splits)
 
-| 反模式 | 症状 |
+| Antipattern | Symptom |
 |:--|:--|
-| 按数量分 | 1~2 个文件也建目录，只因"看起来该有" |
-| 按对称分 | 为结构整齐给每个功能都配包，共因不成立 |
-| 杂物包 | `utils/` `helpers/` `common/` `misc/`——内容特征最杂，检索黑洞 |
-| 只分类不隐藏 | 目录建了，但每个文件都得 `public` 才能协作——包没围住任何秘密 |
+| Splitting by count | A directory for 1–2 files, only because "it feels like there should be one" |
+| Splitting by symmetry | Every feature gets a package for visual symmetry, though the common-closure case does not hold |
+| Junk drawer | `utils/` `helpers/` `common/` `misc/` — the most heterogeneous content, a search black hole |
+| Classify without hiding | The directory exists, but every file must be `public` to collaborate — the package encloses no secret |
 
-## 七 · 理论出处（同源思想）
+## 7 · Theory behind these rules
 
-| 本准则表述 | 对应概念 | 出处 |
+| Statement here | Concept | Source |
 |:--|:--|:--|
-| 功能优先分包 | Package by Feature | [javapractices《Package by feature, not layer》](http://www.javapractices.com/topic/TopicAction.do?Id=205) |
-| 目录"喊出"系统做什么 | Screaming Architecture | [Uncle Bob, 2011](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) |
-| 切片包含 UI、贯穿各层 | Vertical Slice Architecture | [Jimmy Bogard, 2018](https://www.jimmybogard.com/vertical-slice-architecture/) |
-| 一起变更的放一起 | 共同闭包原则 CCP | 包内聚三原则（Uncle Bob, *Agile Software Development*, Ch.13） |
-| 一起被复用的放一起 | 共同复用原则 CRP | 同上 |
-| 按"隐藏的变化"分解模块 | Information Hiding | [Parnas, 1972](https://dl.acm.org/doi/10.1145/361598.361623) |
-| 存量大包触发拆分 | — | [`code-standards`](../code-standards/SKILL.md) § 五；[Android modularization 指南](https://developer.android.com/topic/modularization) 同向 |
+| Package by feature first | Package by Feature | [javapractices, *Package by feature, not layer*](http://www.javapractices.com/topic/TopicAction.do?Id=205) |
+| Directories should shout what the system does | Screaming Architecture | [Uncle Bob, 2011](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) |
+| A slice includes UI and cuts across layers | Vertical Slice Architecture | [Jimmy Bogard, 2018](https://www.jimmybogard.com/vertical-slice-architecture/) |
+| Group what changes together | Common Closure Principle | Package cohesion principles (Uncle Bob, *Agile Software Development*, ch. 13) |
+| Group what is reused together | Common Reuse Principle | Same as above |
+| Decompose modules around hidden change | Information Hiding | [Parnas, 1972](https://dl.acm.org/doi/10.1145/361598.361623) |
+| Split trigger for existing large packages | — | [`code-standards`](../code-standards/SKILL.md) §5; aligned with the [Android modularization guide](https://developer.android.com/topic/modularization) |
 
-**数字阈值（≤2 / ≥3）无权威出处**，是经验启发式；主流文献只给定性判据（高内聚、低耦合），故本技能将其标定为「触发器」而非规则本体。
+**The numeric thresholds (≤2 / ≥3) have no authoritative source** — they are empirical heuristics. Mainstream literature gives only qualitative criteria (high cohesion, low coupling), so this skill marks them as *triggers*, not as the rule itself.

@@ -8,47 +8,47 @@ description: >-
   PowerShell, or updating wezterm.lua / zellij config.kdl.
 ---
 
-# 终端主题与配置分发 (Terminal Dotfiles)
+# Terminal Themes and Config Distribution
 
-目标：**一次配置，跨设备可复现**。所有配置以本技能内模板为唯一源，禁止手工散改多份。
+Goal: **configure once, reproduce on every device.** Templates inside this skill are the only source; never hand-edit divergent copies.
 
 ---
 
-## 部署目标
+## Deployment targets
 
-| 组件 | 目标路径 | 模板 | 关键点 |
+| Component | Target path | Template | Key points |
 |:--|:--|:--|:--|
-| **WezTerm** | `$env:USERPROFILE\.wezterm.lua` | [`templates/wezterm.lua`](templates/wezterm.lua) | Kasugano 冷色调、0.75 窗口透明度、PowerShell UTF-8 防乱码、字体回退链 |
-| **Zellij** | `$env:USERPROFILE\.config\zellij\config.kdl` | [`templates/zellij/config.kdl`](templates/zellij/config.kdl) | 与 Kasugano 匹配的 KDL 配色、鼠标支持、默认 shell = PowerShell |
+| **WezTerm** | `$env:USERPROFILE\.wezterm.lua` | [`templates/wezterm.lua`](templates/wezterm.lua) | Kasugano cool palette, 0.75 window opacity, PowerShell UTF-8 anti-mojibake, font fallback chain |
+| **Zellij** | `$env:USERPROFILE\.config\zellij\config.kdl` | [`templates/zellij/config.kdl`](templates/zellij/config.kdl) | KDL palette matching Kasugano, mouse support, default shell = PowerShell |
 
 ---
 
-## 部署流程
+## Deployment
 
 ```powershell
-# 一键安装终端工具并分发主题（含备份既有配置）
+# Install terminal tools and distribute themes in one shot (backs up existing config)
 powershell -ExecutionPolicy Bypass -File "environment\terminal-dotfiles\scripts\setup-terminal-themes.ps1"
 ```
 
-**顺序**：① 检测 WezTerm / Zellij 是否安装 → ② 备份既有配置 → ③ 复制模板到目标路径 → ④ 提示重启终端验证。
+**Order**: ① detect whether WezTerm / Zellij are installed → ② back up existing config → ③ copy templates to target paths → ④ tell the user to restart the terminal and verify.
 
 ---
 
-## 铁律
+## Iron rules
 
-- 🚫 **禁止**在未确认的情况下覆盖用户既有配置——必须先备份（脚本内已含此步）。
-- 🚫 **禁止**硬编码 `C:\Users\<名字>`；一律用 `$env:USERPROFILE`。
-- ✅ 模板即唯一真相源：改配置先改这里的模板，再从模板分发到各设备，**不得反向手工改本机配置文件后失联**。
+- 🚫 **Never** overwrite the user's existing config without confirmation — back up first (the script already does this).
+- 🚫 **Never** hardcode `C:\Users\<name>`; always use `$env:USERPROFILE`.
+- ✅ The template is the single source of truth: change the template here first, then distribute to devices. **Never hand-edit a machine's config and lose track of it.**
 
 ---
 
-## 排查速查
+## Troubleshooting
 
-| 症状 | 根因 | 处置 |
+| Symptom | Root cause | Fix |
 |:--|:--|:--|
-| PowerShell 中文乱码 | 编码非 UTF-8 | 检查模板中 `chcp 65001` / `$OutputEncoding` 段 |
-| 字体方块 / 缺字 | 字体回退链缺 CJK 项 | 补齐模板 `font_with_fallback` 列表 |
-| Zellij 配色割裂 | KDL 未同步 Kasugano 色值 | 以模板 `config.kdl` 为准重新分发 |
+| Garbled CJK in PowerShell | Encoding is not UTF-8 | Check the `chcp 65001` / `$OutputEncoding` block in the template |
+| Missing glyphs / tofu boxes | Font fallback chain lacks a CJK entry | Complete the `font_with_fallback` list in the template |
+| Zellij colours feel disconnected | KDL palette out of sync with Kasugano | Re-distribute from the template `config.kdl` |
 
-> 完整配置说明：[`references/wezterm-zellij-theme-setup.md`](references/wezterm-zellij-theme-setup.md)
-> btop-lhm 温度监控与 RUNASADMIN 权限继承：[`references/btop-lhm-temperature-monitor.md`](references/btop-lhm-temperature-monitor.md)
+> Full setup notes: [`references/wezterm-zellij-theme-setup.md`](references/wezterm-zellij-theme-setup.md) (zh)
+> btop-lhm temperature monitor and RUNASADMIN inheritance: [`references/btop-lhm-temperature-monitor.md`](references/btop-lhm-temperature-monitor.md) (zh)

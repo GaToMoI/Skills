@@ -117,7 +117,7 @@ ddgs extract -u "https://example.com"                      # 网页提取
 ```
 
 > ⚠️ **优先免费方案**：websearch/ddgs 完全免费、无需注册、无需 key；禁止 curl 抓搜索引擎 HTML。
-> 安装：`pip install -U ddgs`；websearch 包装脚本位于 `~/.pi/agent/bin/websearch.py`。
+> 安装：`pip install -U ddgs`；websearch 包装脚本须落在 `PATH` 上（pi 宿主默认 `~/.pi/agent/bin/websearch.py`）。
 
 ### 6.3 数据解析 (`xsv` / `csview` / `choose` / `yq`)
 

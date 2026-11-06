@@ -11,7 +11,7 @@
 .PARAMETER ScoopGlobalDir
     Optional custom directory for global Scoop apps. Defaults to "$ScoopDir\..\ScoopGlobal".
 .EXAMPLE
-    .\bootstrap-scoop.ps1 -ScoopDir "D:\Scoop"
+    .\bootstrap-scoop.ps1 -ScoopDir "<your-scoop-dir>"
 #>
 
 [CmdletBinding()]
@@ -38,7 +38,7 @@ if (-not $isScoopInstalled) {
     # 若未传参，则交互式请求用户输入
     while ([string]::IsNullOrWhiteSpace($ScoopDir)) {
         Write-Host "⚠️  注意：严禁默认安装到 C 盘系统目录。" -ForegroundColor Magenta
-        $inputPath = Read-Host "请输入 Scoop 的目标安装路径 (推荐示例: D:\Scoop)"
+        $inputPath = Read-Host "请输入 Scoop 的目标安装路径 (推荐放在非系统盘，如 D:\Scoop)"
         if (-not [string]::IsNullOrWhiteSpace($inputPath)) {
             $ScoopDir = $inputPath.Trim()
         }

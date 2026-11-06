@@ -4,7 +4,7 @@
 
 1. **用户目录确认铁律（禁止私自硬编码）**：
    * 在系统未安装 Scoop 时，**严禁私自默认安装到 C 盘（如 `C:\Users\<User>\scoop`）**；
-   * **必须在安装前明确向用户询问安装路径**（推荐向用户提议例如 `D:\Scoop` 或 `D:\Software\Scoop`，由用户最终确认或指定）。
+   * **必须在安装前明确向用户询问安装路径**（推荐向用户提议例如 `<scoop-root>` 或 `<scoop-root>`，由用户最终确认或指定）。
 2. **幂等性检查**：
    * 安装任何工具前，必须先探测 `scoop` 命令是否已可用，已安装则直接跳过安装流程。
 3. **环境变量即时生效**：
@@ -28,18 +28,18 @@ if (Get-Command scoop -ErrorAction SilentlyContinue) {
 ### 第 2 步：若未安装，向用户询问并确认安装目录
 
 当检测到 `SCOOP_NOT_FOUND` 时，AI **必须主动向用户发起确认**，例如：
-> “检测到当前系统尚未安装 Scoop 包管理器。为了避免占用 C 盘系统空间，请问您希望将 Scoop 安装到哪个目录？（推荐：`D:\Scoop` 或您指定的自定义目录）”
+> “检测到当前系统尚未安装 Scoop 包管理器。为了避免占用 C 盘系统空间，请问您希望将 Scoop 安装到哪个目录？（推荐：`<scoop-root>` 或您指定的自定义目录）”
 
 ### 第 3 步：配置环境变量并执行安装
 
-在获得用户指定的安装目录（例如 `$targetDir = "D:\Scoop"`）后，执行以下标准安装脚本：
+在获得用户指定的安装目录（例如 `$targetDir = "<scoop-root>"`）后，执行以下标准安装脚本：
 
 ```powershell
 # 1. 允许 PowerShell 脚本执行策略
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
 # 2. 设置用户级与当前会话 SCOOP 环境变量
-$scoopPath = "D:\Scoop" # 替换为用户指定的实际路径
+$scoopPath = "<scoop-root>" # 替换为用户指定的实际路径
 $globalScoopPath = Join-Path (Split-Path $scoopPath -Parent) "ScoopGlobal"
 
 $env:SCOOP = $scoopPath

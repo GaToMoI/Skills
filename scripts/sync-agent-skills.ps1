@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    将本仓库（D:\GTMI\Skills）的全局技能同步挂载到各 CLI agent 的技能目录。
+    将本仓库（仓库根目录，脚本自动推导）的全局技能同步挂载到各 CLI agent 的技能目录。
 
 .DESCRIPTION
     本仓库是全局技能的唯一真相源。各 CLI agent 自有技能目录，逐一挂载为 junction（目录联接）。
@@ -15,7 +15,7 @@
       3. 只删"指向本仓库"的 junction —— 绝不触碰 agent 自带技能（如 Codex 的 .system、CodeWhale 的 bundled）。
 
 .PARAMETER RepoRoot
-    技能仓库根目录，默认 D:\GTMI\Skills
+    技能仓库根目录，默认取脚本所在目录的上级
 
 .PARAMETER WhatIf
     只打印将执行的操作，不实际改动。

@@ -43,7 +43,7 @@ AI 在新设备上可直接运行内置部署脚本：
 ### 手动分发指令（备选）：
 ```powershell
 # 1. 分发 WezTerm 配置文件
-$weztermSrc = "D:\GTMI\Skills\environment\terminal-dotfiles\templates\wezterm.lua"
+$weztermSrc = "<repo>\environment\terminal-dotfiles\templates\wezterm.lua"
 Copy-Item -Force $weztermSrc "$env:USERPROFILE\.wezterm.lua"
 
 # 2. 分发 Zellij 配置文件
@@ -51,7 +51,7 @@ $zellijConfigDir = "$env:USERPROFILE\.config\zellij"
 if (-not (Test-Path $zellijConfigDir)) {
     New-Item -ItemType Directory -Path $zellijConfigDir -Force
 }
-$zellijSrc = "D:\GTMI\Skills\environment\terminal-dotfiles\templates\zellij\config.kdl"
+$zellijSrc = "<repo>\environment\terminal-dotfiles\templates\zellij\config.kdl"
 Copy-Item -Force $zellijSrc "$zellijConfigDir\config.kdl"
 ```
 

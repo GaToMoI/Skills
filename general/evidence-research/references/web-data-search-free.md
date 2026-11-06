@@ -76,7 +76,7 @@ pip install -U ddgs
 
 ### 建议创建 websearch 包装脚本（干净 JSON 输出）
 
-把 `websearch.py` 放到 `~/.pi/agent/bin/` 下，并创建 `websearch.cmd`（Windows）：
+把 `websearch.py` 放到任一 `PATH` 目录下（pi 宿主默认 `~/.pi/agent/bin/`），并创建 `websearch.cmd`（Windows）：
 
 ```cmd
 @echo off

@@ -9,58 +9,58 @@ description: >-
   a UI is recomposing too often or a Modifier behaves unexpectedly. Not platform-specific, not KMP-specific.
 ---
 
-# Compose 通用规范 (Compose Foundations)
+# Compose Foundations
 
-KMP 与 Android 共用。**平台特化部分见 `kmp-architecture` / `android-platform` 技能。**
+Shared by KMP and Android. **Platform-specific rules live in `kmp-architecture` / `android-platform`.**
 
 ---
 
-## 一 · 副作用与生命周期
+## 1 · Side effects and lifecycle
 
-| API | 铁律 |
+| API | Iron rule |
 |:--|:--|
-| `LaunchedEffect` | key 必须**精准**；用 `Unit` 时确认真的只需执行一次 |
-| `DisposableEffect` | **强制清理**（监听、订阅、回调必须 `onDispose` 反注册） |
-| `rememberUpdatedState` | 长生命周期 effect 内引用**可变闭包**时必须包一层，防过期捕获 |
-| `derivedStateOf` | 仅用于**减少重组触发**的派生计算，不是为了"好看" |
+| `LaunchedEffect` | Keys must be **exact**; when using `Unit`, confirm it truly must run only once |
+| `DisposableEffect` | **Cleanup is mandatory** — listeners, subscriptions, and callbacks must be unregistered in `onDispose` |
+| `rememberUpdatedState` | Wrap any **mutable closure** captured by a long-lived effect, to prevent stale capture |
+| `derivedStateOf` | Only for derived computation that **reduces recomposition** — never for aesthetics |
 
-🚫 禁止：在 Composable 主体内直接启动协程 / 副作用（`GlobalScope.launch` 等）。
+🚫 Forbidden: launching coroutines or side effects directly in a composable body (`GlobalScope.launch`, etc.).
 
-> 判例与反例：[`references/compose-side-effects.md`](references/compose-side-effects.md)
-
----
-
-## 二 · Modifier 顺序与交互
-
-- `clickable` 与 `padding` 的**链式顺序**决定水波纹范围与触摸死区——顺序写错会导致"看起来对但点不到"。
-- **48dp 最小触摸热区**（Material 标准），图标按钮需显式撑开。
-- 公共组件**首选参数必须是** `modifier: Modifier = Modifier`，由调用方决定外部布局。
-
-> 顺序对照与防坑：[`references/modifier-chaining-pitfalls.md`](references/modifier-chaining-pitfalls.md)
+> Cases and counter-examples: [`references/compose-side-effects.md`](references/compose-side-effects.md) (zh)
 
 ---
 
-## 三 · 重组性能
+## 2 · Modifier order and interaction
 
-| 手段 | 用途 |
+- The **chaining order** of `clickable` and `padding` decides ripple bounds and touch dead zones — the wrong order gives "looks right but cannot be tapped".
+- **48dp minimum touch target** (Material standard); icon buttons must be expanded explicitly.
+- A shared component's **first parameter must be** `modifier: Modifier = Modifier`, letting the caller own external layout.
+
+> Order comparisons and pitfalls: [`references/modifier-chaining-pitfalls.md`](references/modifier-chaining-pitfalls.md) (zh)
+
+---
+
+## 3 · Recomposition performance
+
+| Lever | Purpose |
 |:--|:--|
-| `@Immutable` / `@Stable` | 参数稳定性标注，让 Compose 跳过重组 |
-| `ImmutableList` / 持久化集合 | 替代 `List`（`List` 被 Compose 视为不稳定） |
-| Lambda Modifier 延迟读取 | 用 `Modifier.offset { }` 等 lambda 版跳过重组 |
-| `derivedStateOf` | 派生状态，减少下游重组 |
-| 列表 `key` | `LazyColumn` 的 `items(key = ...)` 必须提供 |
+| `@Immutable` / `@Stable` | Mark parameter stability so Compose can skip recomposition |
+| `ImmutableList` / persistent collections | Replace `List` (Compose treats `List` as unstable) |
+| Lambda-based Modifiers (deferred reads) | `Modifier.offset { }` and friends skip recomposition |
+| `derivedStateOf` | Derived state that spares downstream recomposition |
+| List `key` | `LazyColumn`'s `items(key = ...)` is mandatory |
 
-🚫 禁止：把不稳定类型直接当 Composable 参数传递而不加稳定性标注。
+🚫 Forbidden: passing an unstable type directly as a composable parameter without a stability annotation.
 
-> 详表：[`references/recomposition-performance.md`](references/recomposition-performance.md)
+> Full table: [`references/recomposition-performance.md`](references/recomposition-performance.md) (zh)
 
 ---
 
-## 四 · Composable 组件设计契约
+## 4 · Composable design contract
 
-- 公共组件：**`modifier: Modifier = Modifier` 作为首个可选参数**。
-- **Slot API** 优先：用 `content: @Composable () -> Unit` 槽位解耦，而非堆砌布尔开关。
-- 设计令牌（DesignTokens）跨端统一，禁止在组件内硬编码色值/尺寸。
-- 状态提升：组件本身尽量无状态（stateless），状态由调用方持有。
+- Shared components: **`modifier: Modifier = Modifier` as the first optional parameter**.
+- **Prefer the Slot API**: decouple with `content: @Composable () -> Unit` slots instead of piling up boolean switches.
+- Design tokens are shared across platforms; never hardcode colours or dimensions inside a component.
+- State hoisting: keep components stateless where possible; the caller owns the state.
 
-> 契约细则：[`references/composable-component-contract.md`](references/composable-component-contract.md)
+> Contract details: [`references/composable-component-contract.md`](references/composable-component-contract.md) (zh)

@@ -35,9 +35,9 @@
 - btop 留在 WezTerm 里，**同时**能读 CPU 温度（Intel MSR 寄存器在 Ring 0 保护下，非管理员读不到）
 
 ```powershell
-# 注册表位置：HKCU:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers
+# 注册表位置：HKC<system-drive>:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers
 # 键名 = exe 的完整路径，值 = "RUNASADMIN"
-$key = "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"
+$key = "HKC<system-drive>:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"
 Set-ItemProperty -Path $key -Name "C:\Users\<user>\scoop\apps\wezterm\current\wezterm-gui.exe" -Value "RUNASADMIN"
 ```
 

@@ -9,54 +9,54 @@ description: >-
   or when writing @Preview blocks.
 ---
 
-# Android 平台规范 (Android Platform)
+# Android Platform
 
-原生 Android 平台特化规则。**Compose 框架层规则见 `compose-foundations` 技能；KMP 架构见 `kmp-architecture`。**
-
----
-
-## 一 · 沉浸式与 Insets
-
-- **Android 15+ 强制** `enableEdgeToEdge()`（在 `Activity.onCreate` 中，`setContent` 之前）。
-- `Scaffold` 提供的 `paddingValues` **必须消费**——禁止无视后自行硬编码状态栏高度。
-- 需要手动处理时用 `WindowInsets.safeDrawing` / `Modifier.windowInsetsPadding(...)`，**不要**读 `LocalWindowInsets` 拼数值。
-- 🚫 **废弃 Accompanist Insets**（已合入官方 `androidx.compose.foundation.layout`）。
-
-> 细则：[`references/edge-to-edge-insets.md`](references/edge-to-edge-insets.md)
+Rules specific to native Android. **Framework-level Compose rules live in `compose-foundations`; KMP architecture in `kmp-architecture`.**
 
 ---
 
-## 二 · Context 内存安全
+## 1 · Edge-to-edge and insets
 
-- 🚫 **严禁**把 `Activity` / `Context` 注入 ViewModel（长生命周期持有短生命周期 = 泄漏）。
-  - 需要资源时用 `AndroidViewModel` + `Application`，或把字符串/资源 ID 传进去。
-- `LocalContext.current` 的**作用域必须收敛**：仅在 Composable 内即时使用，禁止存入 `remember` 后被长生命周期对象捕获。
-- `remember` 中缓存 Context 派生对象时，确认其生命周期不长于 Composition。
+- **Android 15+ mandates** `enableEdgeToEdge()` (in `Activity.onCreate`, before `setContent`).
+- The `paddingValues` provided by `Scaffold` **must be consumed** — never ignore them and hardcode a status-bar height.
+- When manual handling is needed, use `WindowInsets.safeDrawing` / `Modifier.windowInsetsPadding(...)`; **do not** read `LocalWindowInsets` and assemble numbers yourself.
+- 🚫 **Accompanist Insets is deprecated** (merged into official `androidx.compose.foundation.layout`).
 
-> 判例：[`references/context-memory-safety.md`](references/context-memory-safety.md)
-
----
-
-## 三 · Type-Safe 导航
-
-- 🚫 **废弃字符串拼接路由**（`"detail/$id"` 这类）。
-- ✅ 使用 Navigation Compose 的 **Type-Safe API**：路由声明为 `@Serializable` 数据类/对象，参数是构造属性。
-- 参数类型由编译器保证，模块间跳转不再依赖手写字符串约定。
-
-> 迁移对照：[`references/type-safe-navigation-preview.md`](references/type-safe-navigation-preview.md)
+> Details: [`references/edge-to-edge-insets.md`](references/edge-to-edge-insets.md) (zh)
 
 ---
 
-## 四 · Preview 体系
+## 2 · Context memory safety
 
-- 多尺寸 + 深浅色：`@Preview` 配合 `uiMode = UI_MODE_NIGHT_YES`、`device = Devices.*`，成组声明。
-- Preview 函数保持 `private`，不污染公共 API；用 `@PreviewParameter` 覆盖多状态。
-- 预览数据用假数据便于渲染，**不得**为此在生产代码中放宽可见性或加分支。
+- 🚫 **Never** inject an `Activity` / `Context` into a ViewModel (a long-lived object holding a short-lived one = leak).
+  - When resources are needed, use `AndroidViewModel` + `Application`, or pass strings / resource IDs in.
+- Keep `LocalContext.current`'s **scope tight**: use it immediately inside the composable; never store it in `remember` where a long-lived object can capture it.
+- When caching a Context-derived object in `remember`, confirm its lifetime does not exceed the composition.
 
-> 细则：[`references/type-safe-navigation-preview.md`](references/type-safe-navigation-preview.md)
+> Cases: [`references/context-memory-safety.md`](references/context-memory-safety.md) (zh)
 
 ---
 
-## 五 · 交付前自检
+## 3 · Type-safe navigation
 
-逐项过 [`references/android-checklist.md`](references/android-checklist.md)：Insets 适配 → 副作用清理 → Context 引用安全 → Modifier 顺序 → 导航类型安全。
+- 🚫 **String-concatenated routes are deprecated** (`"detail/$id"` and the like).
+- ✅ Use Navigation Compose's **Type-Safe API**: declare routes as `@Serializable` data classes/objects, with arguments as constructor properties.
+- The compiler guarantees argument types; cross-module navigation no longer relies on hand-written string conventions.
+
+> Migration comparison: [`references/type-safe-navigation-preview.md`](references/type-safe-navigation-preview.md) (zh)
+
+---
+
+## 4 · Preview system
+
+- Multiple sizes plus light/dark: `@Preview` with `uiMode = UI_MODE_NIGHT_YES` and `device = Devices.*`, declared as a group.
+- Preview functions stay `private` and never pollute the public API; use `@PreviewParameter` to cover multiple states.
+- Preview data may be fake for rendering, but **never** loosen visibility or add branches in production code to accommodate it.
+
+> Details: [`references/type-safe-navigation-preview.md`](references/type-safe-navigation-preview.md) (zh)
+
+---
+
+## 5 · Pre-delivery checklist
+
+Work through [`references/android-checklist.md`](references/android-checklist.md) (zh): insets handling → side-effect cleanup → Context reference safety → Modifier order → type-safe navigation.
