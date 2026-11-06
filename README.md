@@ -2,6 +2,8 @@
 
 A cross-project, cross-language library of **AI collaboration skills**, following the **Agent Skills** directory standard. Skills are organised by **"when a rule takes effect"**, not by topic.
 
+**License:** [MIT](LICENSE) — use it, fork it, ship it, sell it.
+
 > English is the authoritative version. A Chinese mirror lives at [`README.zh.md`](README.zh.md) for reading convenience; where the two differ, this file wins.
 
 **Installing these skills elsewhere:** see [`INSTALL.md`](INSTALL.md) — hand it to your agent and it will ask you where things should go.

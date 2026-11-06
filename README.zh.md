@@ -1,5 +1,7 @@
 # 通用工程与 AI 协作技能库 (Universal Skills Repository)
 
+**许可：** [MIT](LICENSE) —— 可自由使用、修改、分发、商用。
+
 > **非规范镜像**：本文件是 [`README.md`](README.md)（英文）的中文学译本，仅为阅读方便。两者不一致时，**以英文版为准**。
 
 **要在别的机器/别的 agent 上安装：**见 [`INSTALL.zh.md`](INSTALL.zh.md)——把它丢给你的 AI，它会问你各项目录放哪。
