@@ -2,9 +2,10 @@
 name: collaboration-discipline
 description: >-
   AI collaboration discipline: authorization granularity, diagnosis-vs-repair boundary, task scope limits,
-  fail-fast clarification, strict objectivity, and target-platform priority. Use when deciding whether to
-  act or ask, when a request is ambiguous or conflicts with constraints, when a problem is found
-  mid-task, or when scope is at risk of creeping beyond what the user asked.
+  one-question-at-a-time clarification, strict objectivity, and target-platform priority. Use when deciding
+  whether to act or ask, when a request is ambiguous or conflicts with constraints, when a problem is found
+  mid-task, when scope is at risk of creeping beyond what the user asked, or when about to end a turn with
+  multiple open questions.
 ---
 
 # 协作纪律 (Collaboration Discipline)
@@ -74,6 +75,20 @@ description: >-
 
 - 跨端工程先明确基准平台（如 Android 优先），先保基准端稳定与性能，再拓展其他端。
 - 严禁为兼容非目标平台引入多余兼容代码，或做破坏核心架构性能的妥协。
+
+---
+
+## 提问纪律（一次只问一个）
+
+**铁律：一个回合只抛一个待决问题。**
+
+- 严禁一次并列 2 个及以上问题让用户逐个回答——用户答完第一个得往上翻找下一个，认知与操作成本极高（用户明确反馈过这一点）。
+- 确有多个待决项时，按**依赖顺序排队**，只问队首那一个；用户回答后再问下一个。
+- **备选方案不算提问**：2~3 个方案用一张表一次呈现（含 Pros & Cons 与推荐倾向），用户只回一个编号即可，不产生翻找成本。
+- 多个**互不依赖**的确认项，合并成**一个**是/否单点确认，不得拆成多问。
+- 收尾句只允许带 **1 个**问句。若某问题其实不影响下一步推进，就不要问，直接按推荐方案给出结论并说明可回退。
+
+自检：**「这条消息里有几个问号是让用户做决定的？」超过 1 个 → 砍掉剩下的，排进队列。**
 
 ---
 
