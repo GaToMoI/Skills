@@ -8,6 +8,21 @@ metadata:
 
 # REA
 
+## pi 本机适配（先读这一段）
+
+本机（Windows + pi coding agent）**未注册 REA 的 MCP 服务器**，一律通过 `rea` CLI 调用：
+
+- 直接用 `rea <command> ...`，如 `rea analyze <target> --format json`、`rea decompile ...`。用户说"帮我逆向/看看某功能怎么做的"时，按下列能力边界选命令，不要先跑注册或安装流程。
+- `rea` 由 scoop 的 Node 26.13.0 运行（启动脚本已固定到 `nodejs-lts\current\node.exe`）；REA 要求 Node ≥22.23.4 / ≥24.22.1 / ≥26.12.1，PATH 上的 MSI Node 22.18.0 不满足，已通过补丁绕开。
+- 环境自检用 `rea doctor --json`。除 `node`/`host` 外的 `missing_analysis_engine` 属于**分析引擎未安装**，不是连接问题；`registration:*`/`config_drift` 在本机属预期（明确不接 MCP）。
+- 本机缺失引擎：`hopper`（Windows 无此引擎）、`ghidra`、`ida`、`jadx`、`kuna`。可做与不可做：
+  - 可用：JavaScript/Electron 静态重建、包与 ZIP 清单、HAR、被动网页抓取、版本对比等离线静态能力。
+  - 不可用：原生二进制反编译（需 Ghidra/IDA）、Android APK 分析（需 jadx+JRE）、固件提取。
+  - 取证纪律：必须区分「REA 输出」与「普通 shell 观察」，缺引擎的部分要单独命名为未取证，不得当成已分析。
+- 下文第 1 节关于 MCP 注册与 `--client` 的说明在本机不适用，可忽略。
+
+---
+
 Use REA when a claim depends on a shipped binary or package, decompilation,
 passive application runtime evidence, or comparison with
 behavior not established by available source. For ordinary analysis of a
