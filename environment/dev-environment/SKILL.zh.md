@@ -1,13 +1,17 @@
 ---
 name: dev-environment
 description: >-
-  Development environment bootstrap and CLI tool routing: detect and install Scoop with user-confirmed
-  install paths, the curated AI-efficiency CLI matrix (fd, rg, ast-grep, jq, rtk, bat, delta), scenario-based
-  tool selection, and verified command-name aliases. Use when setting up a machine, installing or checking
-  tools, choosing which CLI to use for finding files, searching code, parsing JSON, or trimming logs.
+  Windows-only (Scoop / PowerShell) optional efficiency kit and CLI routing: detect and install Scoop with
+  user-confirmed install paths, the curated AI-efficiency CLI matrix (fd, rg, ast-grep, jq, rtk, bat, delta),
+  scenario-based tool selection with silent fallbacks, and verified command-name aliases. Nothing here is
+  required — the kit is an optional upgrade that asks at most once on first use. Use when setting up a Windows
+  machine, checking which CLI to use for finding files, searching code, parsing JSON, or trimming logs; skip on
+  macOS/Linux unless you specifically want the equivalent mapping.
 ---
 
 # 开发环境与工具选型 (Dev Environment)
+
+> **仅 Windows**（Scoop / PowerShell）。macOS / Linux 可直接跳过本技能——任何技能都不依赖这些工具；它们只是可选的提效包，装了更好，缺了就静默降级。
 
 > **非规范镜像**：本文件是 `SKILL.md`（英文，规范版）的中文学译本，仅为阅读方便。两者不一致时，**以英文版为准**。
 
@@ -20,6 +24,68 @@ description: >-
 - ✅ **允许**：日常开发中直接使用**已安装**工具（无需询问）。
 - ✅ **允许**：用户明确要求时，先调研汇报，等确认后再安装。
 - **用户目录主权优先**：严禁硬编码默认安装路径至系统盘；包管理器初始化前必须由用户确认目标目录。
+
+---
+
+## 工具包：全部可选
+
+下表没有任何一项是必需的。每个工具都有替代；缺失时**静默降级、继续干活**，绝不把缺工具变成报错或阻塞。
+
+| 分组 | 工具 | 缺失时的替代 |
+|:--|:--|:--|
+| 搜索 | `fd`、`rg`、`sg`、`ug`、`rga` | `ls` / `Select-String` / `grep`（限定路径）；用 `rg` + 人工复核代替 `sg` |
+| 数据 | `jq`、`yq`、`xsv`、`csview`、`choose`、`mlr` | `python -c` |
+| 网络 | `websearch`（ddgs）、`xh`、`curlie`、`httpstat` | 下方检索阶梯 |
+| 日志 / 构建 | `rtk`、`watchexec`、`just` | `tail` / `head` / `grep` |
+| 预览 / Diff | `bat`、`delta`、`glow`、`hexyl` | `cat` / `diff` |
+| 系统 / 磁盘 | `dust`、`duf`、`dua`、`gdu`、`procs`、`bandwhich`、`broot`、`btm` | 任务管理器 / `df` / `ps` |
+| 导航 | `zoxide`、`eza`、`yazi`、`lf` | `dir` / `ls` |
+
+### 检索阶梯（网页数据）
+
+1. **本工具包的 `websearch`** —— 首选路径：ddgs 封装，免费、无需 key。
+2. **宿主 agent 自带的检索能力**（如果有）—— 可接受的替身，不取代第 1 优先。
+3. **`curl` + 公开 API**，用 `jq` 或 `python` 解析。
+4. **请用户直接粘贴内容。**
+
+走到第 4 步是正常的。缺检索工具不算失败。
+
+---
+
+## 首次邀请（只问一次，之后永不再问）
+
+**在本工作区首次使用本技能时**，若可选工具包尚未安装，提供一次性菜单。得到任何回答后，永不再提。
+
+| 选项 | 安装内容 | 适用 |
+|:--|:--|:--|
+| **A · 最小** | `websearch`（ddgs 封装） | 只需要联网查证 |
+| **B · 推荐** | `fd rg jq bat` + `websearch` | 日常开发 |
+| **C · 全套** | 上表全部 | 一次配好，之后不再折腾 |
+| **D · 跳过** | 什么都不装 | 可以——所有能力都会静默降级 |
+
+**流程**
+
+1. 探测环境。工具包已就绪 → 什么都别说，不出菜单。
+2. 否则列出 A / B / C / D，每项写明装什么、为什么值得装，然后等用户选。
+3. 把回答记进 `<skill-dir>/.tempcache/tool-prefs.json`。
+4. **一辈子只问一次。** 无论用户选什么，本工作区都不再出这个菜单。
+5. 选「跳过」→ 静默降级，不提醒、不唠叨。
+6. 若某任务确实需要联网检索、而阶梯的每一级都不可用，说明一次并请求安装 `websearch` —— 这是唯一允许的第二次提示，且只此一次。
+7. `.tempcache/` 可能被随时清理；状态文件没了，下次使用按首次处理（会再邀请一次）。
+
+**状态文件** —— `<skill-dir>/.tempcache/tool-prefs.json`：
+
+```json
+{
+  "askState": "answered",
+  "choice": "B",
+  "reaskUsed": false,
+  "date": "2026-10-11",
+  "tools": { "websearch": "installed", "rtk": "skipped" }
+}
+```
+
+`askState`：`pending` / `answered` · `choice`：`A` / `B` / `C` / `D`
 
 ---
 

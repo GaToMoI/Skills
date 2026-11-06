@@ -38,6 +38,15 @@ description: >-
 
 ## 二 · 网络数据获取：免费方案优先
 
+按此阶梯依次尝试——缺任何一级都不算失败：
+
+1. **本技能配套的 `websearch`**（可选 `dev-environment` 工具包）—— ddgs 封装，免费、无需 key。**首选。**
+2. 宿主 agent 自带的检索能力（如果有）—— 可接受的替身。
+3. `curl` + 公开 API，用 `jq` 或 `python` 解析。
+4. 请用户直接粘贴内容。
+
+该工具包仅 Windows 且完全可选，见 [`dev-environment`](../../environment/dev-environment/SKILL.md)。
+
 | 场景 | 首选 | 禁止 |
 |:--|:--|:--|
 | 搜索 / 抓网页正文 | `websearch` / `ddgs`（**免费、无需 key**） | 🚫 `curl` 抓搜索引擎 HTML |

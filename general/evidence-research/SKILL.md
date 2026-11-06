@@ -35,6 +35,15 @@ Escalate in order; stop at the first hit:
 
 ## 2 · Web data acquisition: free options first
 
+Follow this ladder in order — a missing rung is not a failure:
+
+1. **`websearch`** from the optional `dev-environment` kit — a free ddgs wrapper, no key. **Preferred.**
+2. The host agent's own web tool, if it has one — an acceptable substitute.
+3. `curl` + a public API, parsed with `jq` or `python`.
+4. Ask the user to paste the content.
+
+The kit itself is Windows-only and entirely optional; see [`dev-environment`](../../environment/dev-environment/SKILL.md).
+
 | Scenario | Prefer | Forbidden |
 |:--|:--|:--|
 | Search / fetch page body | `websearch` / `ddgs` (**free, no key**) | 🚫 `curl` against a search engine's HTML |
