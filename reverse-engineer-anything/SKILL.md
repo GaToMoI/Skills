@@ -15,9 +15,13 @@ metadata:
 - 直接用 `rea <command> ...`，如 `rea analyze <target> --format json`、`rea decompile ...`。用户说"帮我逆向/看看某功能怎么做的"时，按下列能力边界选命令，不要先跑注册或安装流程。
 - `rea` 由 scoop 的 Node 26.13.0 运行（启动脚本已固定到 `nodejs-lts\current\node.exe`）；REA 要求 Node ≥22.23.4 / ≥24.22.1 / ≥26.12.1，PATH 上的 MSI Node 22.18.0 不满足，已通过补丁绕开。
 - 环境自检用 `rea doctor --json`。除 `node`/`host` 外的 `missing_analysis_engine` 属于**分析引擎未安装**，不是连接问题；`registration:*`/`config_drift` 在本机属预期（明确不接 MCP）。
-- 本机缺失引擎：`hopper`（Windows 无此引擎）、`ghidra`、`ida`、`jadx`、`kuna`。可做与不可做：
-  - 可用：JavaScript/Electron 静态重建、包与 ZIP 清单、HAR、被动网页抓取、版本对比等离线静态能力。
-  - 不可用：原生二进制反编译（需 Ghidra/IDA）、Android APK 分析（需 jadx+JRE）、固件提取。
+- 本机引擎现状：`ghidra` **12.1.4 已装可用**（scoop，`GHIDRA_INSTALL_DIR` 已设）；`jadx`/`ida`/`kuna` 缺失；`hopper` 在 Windows 上无此引擎。
+  - 可用：原生 PE 反编译与分析（`rea analyze` / `rea decompile`）、JavaScript/Electron 静态重建、包与 ZIP 清单、HAR、被动网页抓取、版本对比。
+  - 不可用：Android APK 分析（需 jadx+JRE）、固件提取、IDA/Kuna 专属能力。
+- **Ghidra 版本线是硬约束**：REA 只接 12.1.x（已验证 12.1.4），升级到 12.2 会在调用时报 `provider_unavailable / unsupported_version`。而 `rea doctor` 只检查目录，对 12.2 也报 `ghidra ok=True`——**是假绿灯，别信它**，以 `rea analyze <target>` 能否跑通为准。
+- Ghidra 需 JDK 21+；本机用 temurin25，但**只通过** `support/launch.properties` 的 `JAVA_HOME_OVERRIDE` 指定，不动全局 `JAVA_HOME`（全局是 jdk-24，给 Gradle/Android 用）。scoop 升级 Ghidra 后该行会重置，需重设。
+- 实测耗时：
+  - 136 KB 的 PE 小样本：`rea analyze` 约 49 s、`rea decompile --procedure entry` 约 40 s；大二进制预期更久，不要设短超时。
   - 取证纪律：必须区分「REA 输出」与「普通 shell 观察」，缺引擎的部分要单独命名为未取证，不得当成已分析。
 - 下文第 1 节关于 MCP 注册与 `--client` 的说明在本机不适用，可忽略。
 
